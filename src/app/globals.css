@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* 🎨 Root color + font variables */
+:root {
+  /* Background + Foreground */
+  --background: #eae1d1;
+  --foreground: #171717;
+
+  /* Heading font */
+  --FONT-STACK-HEADING: "Sprat Condensed", "Sprat Regular", sans-serif;
+  --FONT-WEIGHT-HEADING: 400;
+  --FONT-STYLE-HEADING: normal;
+  --LETTER-SPACING-HEADING: 0em;
+
+  /* Accent font */
+  --FONT-STACK-ACCENT: "Sprat Extended", serif;
+
+   /* ✅ NEW: System UI font (menu / footer) */
+  --FONT-STACK-SYSTEM: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 🧭 Tailwind theme variables */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/* 🌍 Global styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--FONT-STACK-HEADING);
+  font-weight: var(--FONT-WEIGHT-HEADING);
+  font-style: var(--FONT-STYLE-HEADING);
+  letter-spacing: var(--LETTER-SPACING-HEADING);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🪶 Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--FONT-STACK-HEADING);
+  font-weight: var(--FONT-WEIGHT-HEADING);
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* 🧾 Paragraphs and links */
+p, li, a {
+  letter-spacing: 0.3px;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+/* ✨ Accent text */
+span, .accent-text {
+  font-family: var(--FONT-STACK-ACCENT);
+  letter-spacing: 0.5px;
+}
+
+/* 🔘 Buttons */
+button {
+  font-family: var(--FONT-STACK-HEADING);
+  cursor: pointer;
+}
+
+/* Sprat Font Faces */
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedThin.otf') format('opentype');
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedLight.otf') format('opentype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedRegular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedMedium.otf') format('opentype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedBold.otf') format('opentype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Sprat Condensed';
+  src: url('/fonts/Sprat-CondensedBlack.otf') format('opentype');
+  font-weight: 900;
+}
+
+/* Sprat Regular */
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-RegularThin.otf') format('opentype');
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-RegularLight.otf') format('opentype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-RegularMedium.otf') format('opentype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-RegularBold.otf') format('opentype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Sprat Regular';
+  src: url('/fonts/Sprat-RegularBlack.otf') format('opentype');
+  font-weight: 900;
+}
+
+/* Sprat Extended */
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedThin.otf') format('opentype');
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedLight.otf') format('opentype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedRegular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedMedium.otf') format('opentype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedBold.otf') format('opentype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Sprat Extended';
+  src: url('/fonts/Sprat-ExtendedBlack.otf') format('opentype');
+  font-weight: 900;
+}
+
+
+/* Smooth scrollbar styling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* For the content area */
+.min-h-0 {
+  min-height: 0;
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+/* footer  */
+/* 🔤 Font utilities */
+.font-sprat {
+  font-family: var(--FONT-STACK-HEADING);
+}
+
+.font-system {
+  font-family: var(--FONT-STACK-SYSTEM);
+}
