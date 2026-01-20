@@ -27,8 +27,8 @@ const TextPart = () => {
         className="max-w-6xl mx-auto text-center"
       >
         <p
-          className="text-[1rem]  md:text-[2.1rem] font-normal leading-[2rem] md:leading-[3rem] text-[#1a1a1a] font-light tracking-[0.05em]"
-          style={{ wordSpacing: "0.1em" }}
+          className="text-[1rem]  md:text-[2rem] font-normal leading-[2rem] md:leading-[3rem] text-[#1a1a1a] font-light tracking-[0.05em]"
+          style={{ wordSpacing: "0.2em" }}
         >
           STORIES WITH AD{" "}
           <span className="italic font-normal lowercase">is</span>{" "}

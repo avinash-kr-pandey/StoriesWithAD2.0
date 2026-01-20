@@ -34,19 +34,19 @@ const LEADING = () => {
         >
           {/* Title with font-light */}
           <h2 className="text-2xl md:text-2xl !font-light tracking-wide mb-4 text-gray-800 font-modern">
-            IT’S ALL ABOUT PASSION, GRIT &{" "}
-            <h2 className="  text-2xl md:text-2xl">THE GIRL WHO NEVER GAVE UP</h2>
-            <h2 className=" text-2xl md:text-2xl ">THE LADY BOSS</h2>
+            IT’S ALL ABOUT PASSION, GRIT &{" "} <br /> THE GIRL WHO NEVER GAVE UP <br /> THE LADY BOSS
+            {/* <h2 className="text-2xl md:text-2xl"></h2>
+            <h2 className="text-2xl md:text-2xl "></h2> */}
           </h2>
 
           <div className="md:pr-12 text-justify">
             {/* Paragraphs with font-thin */}
-            <p className="text-gray-800 text-md md:text-md leading-relaxed mb-2 !font-thin">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-2 system-ui">
               “No one said it would be easy. But I promised myself I would work
               hard — so hard that failure simply wouldn’t be an option.”
             </p>
 
-            <p className="text-gray-800 text-md md:text-md leading-relaxed mb-2 !font-thin">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-2 system-ui">
               After 13 years of designing in India, 2 years of rebuilding life in
               Singapore, and now preparing for another big move — this time to the
               United States — AD stands exactly where she always hoped to be: at
@@ -54,7 +54,7 @@ const LEADING = () => {
               fire.
             </p>
 
-            <p className="text-gray-800 text-md md:text-md leading-relaxed mb-0 !font-thin">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-0 system-ui">
               Stories with AD is the result of that fire — an obsession with good
               work, an eye for beauty, a love for craft, and a belief that design
               can hold meaning far beyond spaces. It is a brand built on
@@ -63,7 +63,7 @@ const LEADING = () => {
               herself.
             </p>
 
-            <p className="text-gray-800 text-md md:text-md leading-relaxed !font-thin">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed system-ui">
               And the story is still being written… one project, one dream, one
               chapter at a time.
             </p>

@@ -632,7 +632,7 @@ const Reels = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 relative z-10 px-2">
           <div className="mb-6 sm:mb-0">
             <h2 className="text-3xl md:text-4xl text-gray-800 uppercase tracking-wide ">
-              DESIGN REELS
+              CLIENT REVIEWS
             </h2>
             <p className="font-system text-gray-400 mt-2 text-sm sm:text-base ">
               Hover to preview • Click to view fullscreen
@@ -730,7 +730,7 @@ const Reels = () => {
 
         {/* Desktop Instructions */}
         <div className="hidden sm:block text-center text-gray-500 text-sm mt-10">
-          <div className="inline-flex items-center gap-6 bg-black/30 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10">
+          <div className="inline-flex items-center gap-6  px-6 py-3 rounded-full border border-white/80">
             <div className="flex items-center gap-2">
               <svg
                 className="w-4 h-4"
