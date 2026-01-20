@@ -2,15 +2,26 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { FaArrowUp } from "react-icons/fa";
 
 const Footer = () => {
   const [year] = useState<number>(new Date().getFullYear());
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+  const handleScroll = () => {
+    setShowScrollTop(window.scrollY > 300); // 300px ke baad show
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
   const footerGroups = [
     {
@@ -147,18 +158,32 @@ const Footer = () => {
       </div>
 
       {/* Scroll Top */}
-      <motion.div
-        className="fixed bottom-8 right-8 z-50"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <button
-          onClick={scrollToTop}
-          className="bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-800"
-        >
-          ↑
-        </button>
-      </motion.div>
+      {showScrollTop && (
+  <motion.div
+    className="fixed bottom-8 right-8 z-50"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: 20 }}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+  >
+    <button
+      onClick={scrollToTop}
+      className="
+        px-2 py-2
+        bg-black text-white
+        uppercase tracking-widest text-xs
+        shadow-lg
+        hover:bg-gray-800
+        transition-all duration-300
+        font-system
+      "
+    >
+      <FaArrowUp />
+    </button>
+  </motion.div>
+)}
+
     </footer>
   );
 };

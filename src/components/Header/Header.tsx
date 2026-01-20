@@ -19,6 +19,7 @@ import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [prevHovered, setPrevHovered] = useState<string | null>(null);
   const [isFixed, setIsFixed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [submenu, setSubmenu] = useState<string | null>(null);
@@ -66,7 +67,6 @@ export default function Header() {
         },
       ],
     },
-
     {
       name: "Projects",
       path: "/projects",
@@ -138,6 +138,12 @@ export default function Header() {
   const hoveredItem = menuItems.find((i) => i.name === hovered);
   const activeSubmenu = menuItems.find((i) => i.name === submenu);
 
+  // Check if menu item has dropdown
+  const hasDropdown = (itemName: string) => {
+    const item = menuItems.find((i) => i.name === itemName);
+    return item && item.submenu && item.submenu.length > 0;
+  };
+
   // Close search when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -163,6 +169,29 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Update background state based on hover
+  useEffect(() => {
+    if (hovered) {
+      setShouldShowBg(true);
+      setPrevHovered(hovered);
+    } else {
+      // Only hide background if the previously hovered item didn't have dropdown
+      if (!prevHovered || !hasDropdown(prevHovered)) {
+        const timer = setTimeout(() => {
+          setShouldShowBg(false);
+        }, 300);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [hovered, prevHovered]);
+
+  // Clean up timeouts
+  useEffect(() => {
+    return () => {
+      // Clean up any pending timeouts
+    };
   }, []);
 
   // Handle search submission
@@ -198,31 +227,6 @@ export default function Header() {
     router.push(categoryPath);
     setHovered(null);
   };
-
-  // Check if menu item has dropdown
-  const hasDropdown = (itemName: string) => {
-    const item = menuItems.find((i) => i.name === itemName);
-    return item && item.submenu.length > 0;
-  };
-
-  // Update background state based on hover
-  useEffect(() => {
-    if (hovered) {
-      setShouldShowBg(true);
-    } else {
-      // Delay hiding background to allow transition
-      const timer = setTimeout(() => {
-        setShouldShowBg(false);
-      }, 300); // Match the transition duration
-      return () => clearTimeout(timer);
-    }
-  }, [hovered]);
-  // Clean up timeouts
-  useEffect(() => {
-    return () => {
-      // Clean up any pending timeouts
-    };
-  }, []);
 
   return (
     <header className="w-full bg-transparent text-white absolute top-0 left-0 z-50">
@@ -305,17 +309,16 @@ export default function Header() {
       </AnimatePresence>
 
       {/* Main Header Container */}
-      {/* Main Header Container */}
       <div
         className={`relative z-50 transition-all duration-300 ${
-          shouldShowBg
+          shouldShowBg && hovered
             ? hovered && hasDropdown(hovered)
               ? "bg-[#eae1d1]"
               : "bg-[#eae1d1]/80"
+            : isFixed
+            ? "bg-[#eae1d1]"
             : "bg-transparent"
-        } ${
-          isFixed ? "fixed top-0 left-0 bg-[#eae1d1] border-b border-black" : ""
-        }`}
+        } ${isFixed ? "fixed top-0 left-0 border-b border-black" : ""}`}
         style={{
           position: searchOpen ? "relative" : undefined,
           zIndex: searchOpen ? 40 : 50,
@@ -329,7 +332,7 @@ export default function Header() {
             letterSpacing: "0.08em",
             lineHeight: "1.6",
             fontFamily: "system-ui, sans-serif",
-            fontWeight: 500, // 👈 bold
+            fontWeight: 500,
           }}
         >
           Sign up to my{" "}
@@ -340,7 +343,7 @@ export default function Header() {
           and first access to new gallery collections.
         </div>
 
-        <div className="mx-auto py-6 md:px-6 px-2 relative z-10">
+        <div className="mx-auto py-4 md:px-6 px-2 relative z-10">
           {/* Header Row */}
           <div className="flex justify-between items-center md:justify-between">
             {/* Left (mobile) */}
@@ -371,7 +374,6 @@ export default function Header() {
               className="font-[var(--FONT-STACK-ACCENT)] text-xl flex-grow text-center md:text-4xl text-2xl uppercase tracking-widest"
               style={{
                 color: shouldShowBg || isFixed ? "#1f2937" : "white",
-                letterSpacing: "0.01em",
               }}
             >
               Stories With AD
@@ -383,7 +385,7 @@ export default function Header() {
                 aria-label="Search"
                 className="hidden md:block text-xl hover:opacity-75 transition cursor-pointer"
                 style={{
-                  color: shouldShowBg || isFixed ? "#1f2937" : "white", // ← YEH CHANGE
+                  color: shouldShowBg || isFixed ? "#1f2937" : "white",
                 }}
                 onClick={() => setSearchOpen(true)}
               >
@@ -393,7 +395,7 @@ export default function Header() {
                 aria-label="User"
                 className="text-xl hover:opacity-75 transition cursor-pointer"
                 style={{
-                  color: hovered || isFixed ? "#1f2937" : "white",
+                  color: shouldShowBg || isFixed ? "#1f2937" : "white",
                 }}
                 onClick={handleProfileClick}
               >
@@ -404,7 +406,7 @@ export default function Header() {
                 aria-label="Cart"
                 className="text-xl hover:opacity-75 transition cursor-pointer relative"
                 style={{
-                  color: hovered || isFixed ? "#1f2937" : "white",
+                  color: shouldShowBg || isFixed ? "#1f2937" : "white",
                 }}
                 onClick={handleCartClick}
               >
@@ -419,17 +421,30 @@ export default function Header() {
           </div>
 
           {/* HR Line under header row */}
-          <div className="w-full h-px my-4 md:my-4"></div>
+          {/* <div
+            className={`w-full h-px my-4 md:my-4 ${
+              shouldShowBg || isFixed ? "bg-black" : "bg-white"
+            }`}
+          ></div> */}
 
           {/* Desktop Navigation - USING SPRAT CONDENSED */}
           <nav
             ref={navRef}
-            className="mt-2 hidden md:flex justify-center space-x-10 text-sm uppercase relative z-10 tracking-wider"
+            className="mt-2 hidden md:flex justify-center space-x-6 text-sm uppercase relative z-10 tracking-wider"
           >
             {menuItems?.map((item) => (
               <div
                 key={item.name}
                 onMouseEnter={() => setHovered(item.name)}
+                onMouseLeave={() => {
+                  if (hovered === item.name) {
+                    setTimeout(() => {
+                      if (!hasDropdown(item.name)) {
+                        setHovered(null);
+                      }
+                    }, 100);
+                  }
+                }}
                 className="relative"
               >
                 {item.path ? (
@@ -437,11 +452,11 @@ export default function Header() {
                     <h1
                       className="block py-2 cursor-pointer transition-all duration-300 ease-out hover:opacity-80"
                       style={{
-                        color: shouldShowBg || isFixed ? "#1f2937" : "white", // white/dark ke liye
+                        color: shouldShowBg || isFixed ? "#1f2937" : "white",
                         letterSpacing: "0.08em",
                         lineHeight: "1.6",
                         fontFamily: "system-ui, sans-serif",
-                        fontWeight: 400, // 👈 bold hamesha
+                        fontWeight: 400,
                       }}
                     >
                       {item.name}
@@ -455,7 +470,7 @@ export default function Header() {
                       letterSpacing: "0.08em",
                       lineHeight: "1.6",
                       fontFamily: "system-ui, sans-serif",
-                      fontWeight: 700, // 👈 bold
+                      fontWeight: 700,
                     }}
                   >
                     {item.name}
@@ -464,7 +479,10 @@ export default function Header() {
 
                 <motion.div
                   layoutId="underline"
-                  className="absolute left-0 right-0 bottom-0 h-[2px] bg-black"
+                  className="absolute left-0 right-0 bottom-0 h-[2px]"
+                  style={{
+                    backgroundColor: shouldShowBg || isFixed ? "black" : "white",
+                  }}
                   initial={{ width: 0 }}
                   animate={{ width: hovered === item.name ? "100%" : 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -473,8 +491,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* HR Line under navigation */}
-          <div className="w-full h-px bg-gray-300 mt-4 hidden md:block"></div>
+          
 
           {/* Desktop Dropdown - USING SPRAT CONDENSED */}
           <AnimatePresence>
@@ -541,7 +558,7 @@ export default function Header() {
                           ]?.map((image, index) => (
                             <div key={index} className="group cursor-pointer">
                               <div
-                                className="w-full h-64 relative overflow-hidden rounded-lg mb-4" // height कम करें
+                                className="w-full h-64 relative overflow-hidden rounded-lg mb-4"
                                 onClick={() =>
                                   handleGalleryImageClick(
                                     selectedGalleryCategory
@@ -585,8 +602,6 @@ export default function Header() {
                     ) : (
                       // Default dropdown for other menus
                       <div className="grid grid-cols-2 gap-6">
-                        {" "}
-                        {/* gap कम करें */}
                         {hoveredItem.submenu.map((sub, index) => (
                           <Link
                             key={sub.name}
@@ -595,8 +610,6 @@ export default function Header() {
                             onClick={() => setHovered(null)}
                           >
                             <div className="w-full h-64 relative overflow-hidden rounded-lg mb-4">
-                              {" "}
-                              {/* height कम करें */}
                               <Image
                                 src={sub.image}
                                 alt={sub.name}
@@ -765,6 +778,12 @@ export default function Header() {
           )}
         </AnimatePresence>
       </div>
+      {/* HR Line under navigation */}
+          <div
+            className={`w-full h-px mt-0 hidden md:block ${
+              shouldShowBg || isFixed ? "bg-black" : "bg-white"
+            }`}
+          ></div>
     </header>
   );
 }
