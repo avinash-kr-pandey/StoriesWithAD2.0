@@ -30,7 +30,7 @@ const ReelModal = ({
   >(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(
-    new Set([initialIndex])
+    new Set([initialIndex]),
   );
 
   const currentVideoRef = useRef<HTMLVideoElement>(null);
@@ -41,7 +41,7 @@ const ReelModal = ({
   const currentReel = useMemo(() => reelsData[currentIndex], [currentIndex]);
   const nextReel = useMemo(
     () => (nextIndex !== null ? reelsData[nextIndex] : null),
-    [nextIndex]
+    [nextIndex],
   );
 
   // Video configuration
@@ -52,7 +52,7 @@ const ReelModal = ({
       disablePictureInPicture: true,
       controlsList: "nodownload noremoteplayback" as const,
     }),
-    []
+    [],
   );
 
   // Preload adjacent videos
@@ -204,8 +204,8 @@ const ReelModal = ({
               transitionDirection === "up"
                 ? "-translate-y-full opacity-0"
                 : transitionDirection === "down"
-                ? "translate-y-full opacity-0"
-                : "translate-y-0 opacity-100"
+                  ? "translate-y-full opacity-0"
+                  : "translate-y-0 opacity-100"
             }`}
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
@@ -256,8 +256,8 @@ const ReelModal = ({
                 transitionDirection === "up"
                   ? "translate-y-0 opacity-100"
                   : transitionDirection === "down"
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-full opacity-0"
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-full opacity-0"
               }`}
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
@@ -321,16 +321,6 @@ const ReelModal = ({
             <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-t-transparent border-r-[15px] border-r-white border-b-[10px] border-b-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
 
-          {/* Current Position */}
-          <div className="text-center py-2">
-            {/* <div className="text-white text-2xl font-bold font-system">
-              {currentIndex + 1}
-            </div> */}
-            {/* <div className="text-gray-400 text-sm mt-1 font-system">
-              of {reelsData.length}
-            </div> */}
-          </div>
-
           {/* Next Button */}
           <button
             onClick={scrollToNext}
@@ -377,13 +367,11 @@ const ReelModal = ({
           </div>
           <div className="h-4 w-px bg-white/30" />
           <div className="flex items-center gap-2">
-            {/* <kbd className="px-2 py-1 bg-black/50 rounded text-xs">Space</kbd> */}
             <span className="font-system">Play/Pause</span>
           </div>
           <div className="h-4 w-px bg-white/30" />
           <div className="flex items-center gap-2">
-            {/* <kbd className="px-2 py-1 bg-black/50 rounded text-xs"></kbd> */}
-            <span className="font-system"> ESC TO Close</span>
+            <span className="font-system">ESC to Close</span>
           </div>
         </div>
       </div>
@@ -392,49 +380,52 @@ const ReelModal = ({
 };
 
 // Single Reel Card Component
-const ReelCard = ({ reel, onView }: { reel: Reel; onView: () => void }) => {
+
+const ReelCard = ({
+  reel,
+  isPlaying,
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+}: {
+  reel: Reel;
+  isPlaying: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onClick: () => void;
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isActive, setIsActive] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-
-  // Debounce mouse events for better performance
-  const handleMouseEnter = useDebouncedCallback(() => {
-    setIsActive(true);
-  }, 100);
-
-  const handleMouseLeave = useDebouncedCallback(() => {
-    setIsActive(false);
-  }, 300);
+  const [isPausedManually, setIsPausedManually] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    let isMounted = true;
-
-    if (isActive && !isLoaded) {
-      // Only load when needed
-      video.src = reel.videoUrl;
-      video.load();
-      video
-        .play()
-        .catch(() => {
-          // Auto-play might fail, that's okay
-        })
-        .finally(() => {
-          if (isMounted) setIsLoaded(true);
-        });
-    } else if (!isActive && isLoaded) {
-      // Pause but don't unload
+    if (isPlaying && !isPausedManually) {
+      video.play().catch(() => {
+        // Auto-play might fail, that's okay
+      });
+    } else {
       video.pause();
-      video.currentTime = 0;
+      if (!isPlaying) {
+        video.currentTime = 0;
+      }
     }
+  }, [isPlaying, isPausedManually]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [isActive, isLoaded, reel.videoUrl]);
+  const handleCardClick = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPausedManually(false);
+      } else {
+        videoRef.current.pause();
+        setIsPausedManually(true);
+      }
+    }
+    onClick(); // Call parent's onClick handler
+  };
 
   // Cleanup on unmount
   useEffect(() => {
@@ -451,64 +442,67 @@ const ReelCard = ({ reel, onView }: { reel: Reel; onView: () => void }) => {
     <div
       ref={cardRef}
       className="relative min-w-[320px] h-[500px] rounded-2xl overflow-hidden cursor-pointer reel-card"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={onView}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onClick={handleCardClick}
       role="button"
       tabIndex={0}
-      aria-label={`View ${reel.title} reel`}
+      aria-label={`Play/Pause ${reel.title} reel`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          onView();
+          handleCardClick();
         }
       }}
     >
       <video
         ref={videoRef}
-        poster={reel.thumbnail}
-        preload="none"
-        muted
+        src={reel.videoUrl}
+        // poster={reel.thumbnail}
+        preload="metadata"
+        // muted
+        loop
         playsInline
         disablePictureInPicture
         controlsList="nodownload"
         className="w-full h-full object-cover"
       />
 
-      {/* Loading skeleton */}
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 animate-pulse" />
-      )}
-
-      {/* Fallback image */}
-      <Image
+      {/* Fallback image - इसे हटा दें */}
+      {/* <Image
         src={reel.thumbnail}
         alt={reel.title}
         className={`absolute font-system inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-          isLoaded ? "opacity-0" : "opacity-100"
+          isPlaying && !isPausedManually ? "opacity-0" : "opacity-100"
         }`}
         loading="lazy"
         width={300}
         height={300}
-      />
+      /> */}
 
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white bg-gradient-to-t from-black/30 via-black/20 to-transparent">
         <h3 className="text-lg font-system">{reel.title}</h3>
         <p className="text-white font-semibold text-sm mt-1 line-clamp-1 font-system">
           {reel.description}
-        </p>  
+        </p>
       </div>
 
-      {/* Play overlay */}
+      {/* Play/Pause overlay */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
         <div className="bg-black/60 backdrop-blur-sm p-4 rounded-full border border-white/20">
-          <div className="w-0 h-0 border-t-[15px] border-t-transparent border-l-[25px] border-l-white border-b-[15px] border-b-transparent ml-1" />
+          {videoRef.current?.paused ? (
+            <div className="w-0 h-0 border-t-[15px] border-t-transparent border-l-[25px] border-l-white border-b-[15px] border-b-transparent ml-1" />
+          ) : (
+            <div className="flex items-center justify-center space-x-1">
+              <div className="w-2 h-5 bg-white" />
+              <div className="w-2 h-5 bg-white" />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
-
 const Reels = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showButtons, setShowButtons] = useState(false);
@@ -516,6 +510,9 @@ const Reels = () => {
   const [modalIndex, setModalIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(
+    null,
+  );
 
   // Throttled scroll handler
   const handleScroll = useCallback(
@@ -533,14 +530,43 @@ const Reels = () => {
       // Reset scrolling state
       setTimeout(() => setIsScrolling(false), 300);
     },
-    [isScrolling]
+    [isScrolling],
   );
 
-  // Memoize click handler
-  const handleViewClick = useCallback((index: number) => {
-    setModalIndex(index);
+  // Handle hover on reel card
+  const handleReelMouseEnter = useCallback((index: number) => {
+    setCurrentPlayingIndex(index);
+  }, []);
+
+  const handleReelMouseLeave = useCallback(
+    (index: number) => {
+      if (currentPlayingIndex === index) {
+        setCurrentPlayingIndex(null);
+      }
+    },
+    [currentPlayingIndex],
+  );
+
+  // Handle View All button click - opens modal with first video
+  const handleViewAllClick = useCallback(() => {
+    setModalIndex(0); // Always start from first video
     setModalOpen(true);
   }, []);
+
+  // Handle reel card click - toggle play/pause
+  const handleReelClick = useCallback(
+    (index: number) => {
+      // Toggle play/pause for this video
+      if (currentPlayingIndex === index) {
+        // If this video is currently playing, stop it
+        setCurrentPlayingIndex(null);
+      } else {
+        // Otherwise, play this video
+        setCurrentPlayingIndex(index);
+      }
+    },
+    [currentPlayingIndex],
+  );
 
   // Memoize reels to prevent unnecessary re-renders
   const reelCards = useMemo(() => {
@@ -548,15 +574,22 @@ const Reels = () => {
       <ReelCard
         key={`reel-${reel.id}`}
         reel={reel}
-        onView={() => handleViewClick(index)}
+        isPlaying={currentPlayingIndex === index}
+        onMouseEnter={() => handleReelMouseEnter(index)}
+        onMouseLeave={() => handleReelMouseLeave(index)}
+        onClick={() => handleReelClick(index)}
       />
     ));
-  }, [handleViewClick]);
+  }, [
+    currentPlayingIndex,
+    handleReelMouseEnter,
+    handleReelMouseLeave,
+    handleReelClick,
+  ]);
 
   // Initialize scroll position
   useEffect(() => {
     if (scrollRef.current) {
-      // Start at a reasonable position
       scrollRef.current.scrollLeft = 100;
     }
   }, []);
@@ -583,7 +616,6 @@ const Reels = () => {
         const diffX = Math.abs(touchMoveX - touchStartX);
         const diffY = Math.abs(touchMoveY - touchStartY);
 
-        // Determine if horizontal scroll
         if (diffX > diffY && diffX > 10) {
           isScrollingHorizontal = true;
         }
@@ -635,13 +667,15 @@ const Reels = () => {
               CLIENT REVIEWS
             </h2>
             <p className="font-system text-gray-400 mt-2 text-sm sm:text-base ">
-              Hover to preview • Click to view fullscreen
+              Hover to preview • Click to play/pause
             </p>
           </div>
-          <GlobalButton
-            text="View All"
-            className="mt-4 px-6 py-1 border border-gray-800 text-gray-800 h-[48px] hover:bg-gray-300"
-          />
+          <div onClick={handleViewAllClick} className="cursor-pointer">
+            <GlobalButton
+              text="View All"
+              className="mt-4 px-6 py-1 border border-gray-800 text-gray-800 h-[48px] hover:bg-gray-300"
+            />
+          </div>
         </div>
 
         {/* Scroll Buttons - Desktop only */}
@@ -725,12 +759,12 @@ const Reels = () => {
 
         {/* Mobile Instructions */}
         <div className="font-system block sm:hidden text-center text-gray-400 text-sm mt-8 px-4">
-          <p>Swipe horizontally to browse • Tap to view</p>
+          <p>Swipe horizontally to browse • Tap to play/pause</p>
         </div>
 
         {/* Desktop Instructions */}
         <div className="hidden sm:block text-center text-gray-500 text-sm mt-10">
-          <div className="inline-flex items-center gap-6  px-6 py-3 rounded-full border border-gray-600">
+          <div className="inline-flex items-center gap-6 px-6 py-3 rounded-full border border-gray-600">
             <div className="flex items-center gap-2">
               <svg
                 className="w-4 h-4"
@@ -761,18 +795,11 @@ const Reels = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
                 />
               </svg>
               <span className="text-gray-800 font-system">
-                Click for fullscreen
-
+                Click to play/pause
               </span>
             </div>
             <div className="h-4 w-px bg-gray-600" />
@@ -787,17 +814,11 @@ const Reels = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M4 6h16M4 12h16m-7 6h7"
                 />
               </svg>
               <span className="text-gray-800 font-system">
-                Autoplay on hover
+                View All for fullscreen
               </span>
             </div>
           </div>

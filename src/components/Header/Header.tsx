@@ -12,7 +12,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import images from "@/utils/images";
 import { useCart } from "@/context/CartContext";
@@ -34,6 +34,9 @@ export default function Header() {
   const navRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [shouldShowBg, setShouldShowBg] = useState(false);
+  const pathname = usePathname();
+const isHomePage = pathname === "/";
+
 
   const menuItems = [
     {
@@ -389,13 +392,25 @@ export default function Header() {
             {/* Logo - USING SPRAT CONDENSED */}
             <Link
               href="/"
-              className="font-[var(--FONT-STACK-ACCENT)] text-xl flex-grow text-center md:text-4xl text-2xl uppercase tracking-widest"
+              className="font-[var(--FONT-STACK-ACCENT)] text-xl flex-grow text-center
+               md:text-4xl text-2xl uppercase tracking-widest"
               style={{
-                color: shouldShowBg || isFixed ? "#1f2937" : "white",
+                color: isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
               }}
             >
               Stories With AD
             </Link>
+
+            {/* <Link
+              href="/"
+              className="font-[var(--FONT-STACK-ACCENT)] text-xl md:text-4xl uppercase tracking-widest"
+              style={{
+                color:
+                  isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
+              }}
+            >
+              Stories With AD
+            </Link> */}
 
             {/* Icons (Right section) */}
             <div className="flex space-x-4 items-center transition-colors duration-300">
@@ -468,17 +483,16 @@ export default function Header() {
                 {item.path ? (
                   <Link href={item.path}>
                     <h1
-                      className="block py-2 cursor-pointer transition-all duration-300 ease-out hover:opacity-80"
-                      style={{
-                        color: shouldShowBg || isFixed ? "#1f2937" : "white",
-                        letterSpacing: "0.08em",
-                        lineHeight: "1.6",
-                        fontFamily: "system-ui, sans-serif",
-                        fontWeight: 400,
-                      }}
-                    >
-                      {item.name}
-                    </h1>
+  className="block py-2 cursor-pointer transition-all duration-300"
+  style={{
+    color: isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
+    letterSpacing: "0.08em",
+    fontFamily: "system-ui, sans-serif",
+  }}
+>
+  {item.name}
+</h1>
+
                   </Link>
                 ) : (
                   <h1

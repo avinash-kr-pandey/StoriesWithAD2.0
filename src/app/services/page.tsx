@@ -59,6 +59,30 @@ const Services = () => {
     },
   ];
 
+  // Section data with alternating layout
+  const sections = [
+    {
+      title: "Custom Design Consultations",
+      image: images.featured.spotlight[0], // _DEV1493.jpg
+      content: `Our custom design consultations begin with an in-depth exploration of your vision, lifestyle, and functional requirements. We work closely with you to understand the unique characteristics of your space, whether it's a residential interior, commercial establishment, or special project. Our team conducts thorough site assessments, taking precise measurements and evaluating architectural elements to create designs that harmonize with existing structures. We discuss materials, color palettes, lighting solutions, and spatial arrangements, ensuring every aspect aligns with your aesthetic preferences and practical needs while staying within your budget parameters.`,
+    },
+    {
+      title: "Space Planning & Optimization",
+      image: images.featured.spotlight[1], // _DEV1505.jpg
+      content: `Effective space planning transforms how you live and work within your environment. We analyze traffic flow, furniture placement, and functional zones to maximize both utility and visual appeal. Our optimization strategies consider natural light patterns, acoustics, and multi-purpose usage, creating adaptable spaces that evolve with your needs. We employ advanced visualization tools to present realistic 3D renderings, allowing you to experience the proposed design before implementation. This meticulous approach ensures every square foot serves a purpose while maintaining aesthetic coherence throughout the entire space.`,
+    },
+    {
+      title: "Material Selection & Sourcing",
+      image: images.portfolio.photography[0], // _DEV1460.jpg
+      content: `Material selection forms the foundation of exceptional design. We guide you through our curated collection of premium materials, including sustainable woods, natural stones, bespoke textiles, and innovative composites. Our extensive network of artisans and suppliers ensures access to exclusive materials not available through conventional channels. We consider durability, maintenance requirements, environmental impact, and tactile qualities when recommending materials. Each selection undergoes rigorous testing for performance and longevity, guaranteeing that your investment withstands daily use while maintaining its visual appeal for years to come.`,
+    },
+    {
+      title: "Project Management & Installation",
+      image: images.featured.spotlight[2], // _DEV1511.jpg
+      content: `Seamless execution distinguishes ordinary projects from extraordinary ones. Our comprehensive project management oversees every phase from initial concept to final installation. We coordinate with contractors, artisans, and suppliers, maintaining strict quality control and timeline adherence. Our installation teams handle furniture placement, accessory styling, and final detailing with precision. We conduct thorough quality inspections and provide detailed maintenance guidelines upon project completion. Our commitment extends beyond installation with follow-up consultations to ensure your continued satisfaction and address any evolving needs within your newly transformed space.`,
+    },
+  ];
+
   // Additional service examples
   const serviceExamples = [
     images.gallery.bespoke[0], // _DEV1042.jpg
@@ -70,247 +94,60 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-42 py-10 px-6">
-      {/* ================= HEADER (FILTER + SORT) ================= */}
-      <div className="border-2 border-white py-4 px-6 flex justify-between items-center mb-10 max-w-6xl mx-auto h-16">
-        {/* FILTER BUTTON WITH DROPDOWN */}
-        <div
-          ref={filterRef}
-          className="relative h-full flex items-center border-r-2 border-white pr-4"
-        >
-          <button
-            onClick={() => setFiltersOpen(!filtersOpen)}
-            className="flex items-center text-sm px-4 py-2 h-full"
-          >
-            ⚲ SHOW FILTERS
-          </button>
+    <div className="min-h-screen pt-42">
+      {/* Main title section */}
+      <div className="py-10 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-4xl font-light mb-4 !system-ui uppercase py-8">
+            Services
+          </h1>
 
-          {filtersOpen && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-white border shadow-md rounded-md z-20">
-              <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm border-b">
-                All Services
-              </button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm border-b">
-                By Duration
-              </button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm border-b">
-                Design Services
-              </button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm">
-                Photography Services
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* SORT DROPDOWN */}
-        <div
-          ref={sortRef}
-          className="relative h-full flex items-center border-l-2 border-white pl-4"
-        >
-          <button
-            onClick={() => setSortOpen(!sortOpen)}
-            className="text-sm px-4 py-2 h-full flex items-center"
-          >
-            SORT BY ▾
-          </button>
-
-          {sortOpen && (
-            <div className="absolute top-full right-0 mt-1 w-44 bg-white border shadow-md rounded-md z-20">
-              <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm border-b"
-                onClick={() => {
-                  setSortOption("a-z");
-                  setSortOpen(false);
-                }}
-              >
-                Alphabetical (A–Z)
-              </button>
-              <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm border-b"
-                onClick={() => {
-                  setSortOption("duration");
-                  setSortOpen(false);
-                }}
-              >
-                By Duration
-              </button>
-              <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
-                onClick={() => {
-                  setSortOption("popular");
-                  setSortOpen(false);
-                }}
-              >
-                Most Popular
-              </button>
-            </div>
-          )}
+          {/* Featured Banner */}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto">
-        {/* MAIN TITLE */}
-        <h1 className="text-2xl font-light mb-4">Services</h1>
-        <p className="text-xl text-gray-600 mb-12 max-w-2xl">
-          Comprehensive services to bring your vision to life with attention to
-          detail and creative excellence.
-        </p>
-
-        {/* Featured Banner */}
-        <div className="mb-16">
-          <div className="aspect-[16/6] relative overflow-hidden mb-6">
-            <Image
-              src={images.featured.curated}
-              alt="Our Services"
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* TITLE OVERLAY */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-              <h2 className="text-white text-2xl font-medium mb-2">
-                Our Services
-              </h2>
-              <p className="text-gray-300 text-xl">
-                Comprehensive creative solutions for your projects
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {services.map((service, index) => (
-            <div key={index} className="group cursor-pointer">
-              <div className="aspect-[4/3] relative overflow-hidden mb-4">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* TITLE OVERLAY */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <h3 className="text-white text-2xl font-medium mb-1">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-300 text-xl mb-1">
-                    {service.description}
-                  </p>
-                  <p className="text-gray-400 text-lg">
-                    Duration: {service.duration}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Service Examples */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-light mb-6">Service Examples</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {serviceExamples.map((src, index) => (
-              <div key={index} className="group cursor-pointer">
-                <div className="aspect-square relative overflow-hidden mb-2">
+      {/* 4 Full-screen alternating sections */}
+      {sections.map((section, index) => (
+        <div
+          key={index}
+          className="min-h-screen flex items-center justify-center"
+        >
+          <div className="w-full max-w-7xl mx-auto px-6">
+            <div
+              className={`flex flex-col ${
+                index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+              } items-center gap-12`}
+            >
+              {/* Image Section */}
+              <div className="lg:w-1/2 w-full">
+                <div className="aspect-[4/3] lg:aspect-square relative overflow-hidden">
                   <Image
-                    src={src}
-                    alt={`Service example ${index + 1}`}
+                    src={section.image}
+                    alt={section.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="object-cover hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                  {/* TITLE OVERLAY */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                    <p className="text-white text-2xl text-center">
-                      Example {index + 1}
-                    </p>
-                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Process Section */}
-        <div className="p-8 border-t">
-          <h2 className="text-2xl font-light mb-6">Our Process</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group cursor-pointer">
-              <div className="aspect-[4/3] relative overflow-hidden mb-4">
-                <Image
-                  src={images.gallery.seating[0]}
-                  alt="Initial Consultation"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* TITLE OVERLAY */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <h3 className="text-white text-2xl font-medium mb-2">
-                    Initial Consultation
-                  </h3>
-                  <p className="text-gray-300 text-xl">
-                    Understanding your vision, requirements, and project scope
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group cursor-pointer">
-              <div className="aspect-[4/3] relative overflow-hidden mb-4">
-                <Image
-                  src={images.gallery.tables[0]}
-                  alt="Design & Planning"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* TITLE OVERLAY */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <h3 className="text-white text-2xl font-medium mb-2">
-                    Design & Planning
-                  </h3>
-                  <p className="text-gray-300 text-xl">
-                    Creating detailed designs and comprehensive project plans
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group cursor-pointer">
-              <div className="aspect-[4/3] relative overflow-hidden mb-4">
-                <Image
-                  src={images.gallery.lighting[0]}
-                  alt="Execution & Delivery"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* TITLE OVERLAY */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <h3 className="text-white text-2xl font-medium mb-2">
-                    Execution & Delivery
-                  </h3>
-                  <p className="text-gray-300 text-xl">
-                    Bringing the vision to life with precision and attention to
-                    detail
+              {/* Text Content Section */}
+              <div className="lg:w-1/2 w-full">
+                <div className="max-w-lg mx-auto lg:mx-0">
+                  <h2 className="text-2xl lg:text-3xl font-light mb-8 !system-ui pb-4">
+                    {section.title}
+                  </h2>
+                  <p className="text-gray-800 text-md leading-relaxed !system-ui text-justify">
+                    {section.content}
                   </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      ))}
 
-        {/* Contact Section */}
-        <div className="mt-16 p-8 border-t text-center">
-          <h2 className="text-2xl font-light mb-4">Start Your Project</h2>
-          <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
-            Ready to bring your vision to life? Contact us to discuss your
-            project and how we can help you achieve your goals.
-          </p>
-          <button className="border border-black px-8 py-3 hover:bg-black hover:text-white transition-colors">
-            Get Started
-          </button>
-        </div>
-      </div>
+      
     </div>
   );
 };
