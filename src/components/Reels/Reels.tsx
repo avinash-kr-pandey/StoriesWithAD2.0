@@ -458,7 +458,7 @@ const ReelCard = ({
       <video
         ref={videoRef}
         src={reel.videoUrl}
-        // poster={reel.thumbnail}
+        poster={reel.thumbnail}
         preload="metadata"
         // muted
         loop

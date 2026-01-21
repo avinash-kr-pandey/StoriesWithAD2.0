@@ -1,210 +1,134 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import images from "@/utils/images";
-import GlobalButton from "@/components/utils/GlobalButton";
 
-const Book = () => {
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const [sortOption, setSortOption] = useState("");
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    interest: "",
+    message: "",
+  });
 
-  const filterRef = useRef<HTMLDivElement>(null);
-  const sortRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
-      ) {
-        setFiltersOpen(false);
-      }
-      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-        setSortOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // Select images for the book page - showing portfolio work
-  const portfolioImages = [
-    images.portfolio.webDesign[0], // _DEV1422.jpg
-    images.portfolio.photography[1], // _DEV1463.jpg
-    images.gallery.bespoke[0], // _DEV1042.jpg
-    images.gallery.lighting[2], // _DEV0966.jpg
-    images.featured.spotlight[0], // _DEV1493.jpg
-    images.additional[5], // _DEV1542.jpg
-  ];
-
-  // Section data with alternating layout - Using only existing content
-  const sections = [
-    {
-      title: "Book a Session",
-      image: images.featured.spotlight[0], // _DEV1493.jpg
-      content: `Ready to start your project? Fill out the form below and I'll get back to you within 24 hours.`,
-    },
-  ];
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic here
-    console.log("Form submitted");
+    console.log("Form Data:", formData);
   };
 
   return (
-    <div className="min-h-screen pt-42">
-      {/* Main Content Section with Form and Images */}
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Form Section */}
-            <div>
-              <div className="mb-8">
-                <h2 className="text-2xl lg:text-3xl font-light mb-4 !system-ui uppercase">
-                  Book a Session
-                </h2>
-                <div className="w-20 h-px bg-gray-800 mb-6"></div>
-                <p className="text-gray-600 text-md leading-relaxed !system-ui text-justify">
-                  Ready to start your project? Fill out the form below and I'll
-                  get back to you within 24 hours.
-                </p>
+    <section className="min-h-screen pt-44 max-w-6xl mx-auto py-12">
+      <div className="grid lg:grid-cols-2 min-h-screen">
+        {/* LEFT IMAGE */}
+        <div className="relative hidden lg:block">
+          <Image
+            src={images.portfolio.webDesign[0]}
+            alt="Contact"
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+
+        {/* RIGHT FORM */}
+        <div className="flex items-center justify-center px-6 lg:px-24">
+          <div className="w-full max-w-md">
+            {/* Heading */}
+            <h2 className="text-4xl font-light tracking-wide mb-16 text-black pb-12">
+              CONTACT
+            </h2>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-14">
+              {/* First Name */}
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name *"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="w-full bg-transparent border-b border-black/60 py-2 text-sm
+                focus:outline-none focus:border-black placeholder:text-black/40"
+              />
+
+              {/* Last Name */}
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name *"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="w-full bg-transparent border-b border-black/60 py-2 text-sm
+                focus:outline-none focus:border-black placeholder:text-black/40"
+              />
+
+              {/* Email */}
+              <input
+                type="email"
+                name="email"
+                placeholder="Email *"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full bg-transparent border-b border-black/60 py-2 text-sm
+                focus:outline-none focus:border-black placeholder:text-black/40"
+              />
+
+              {/* Interest */}
+              <select
+                name="interest"
+                value={formData.interest}
+                onChange={handleChange}
+                className="w-full bg-transparent border-b border-black/60 py-2 text-sm
+                focus:outline-none focus:border-black appearance-none cursor-pointer"
+              >
+                <option value="">I'm interested in</option>
+                <option value="consultation">Consultation</option>
+                <option value="design">Design</option>
+                <option value="photography">Photography</option>
+                <option value="installation">Installation</option>
+              </select>
+
+              {/* Message */}
+              <textarea
+                name="message"
+                rows={3}
+                placeholder="How can we help?"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full bg-transparent border-b border-black/60 py-2 text-sm
+                focus:outline-none focus:border-black resize-none placeholder:text-black/40"
+              />
+
+              {/* Submit Button */}
+              <div className="pt-10 flex justify-center">
+                <button
+                  type="submit"
+                  className="bg-[#b89b7c] px-12 py-3 text-sm tracking-widest
+    uppercase hover:opacity-90 transition"
+                >
+                  Submit
+                </button>
               </div>
-
-              <form className="space-y-8" onSubmit={handleSubmit}>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <label className="block text-sm font-medium mb-3 !system-ui text-gray-700">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-gray-800 transition-colors duration-300 !system-ui"
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-3 !system-ui text-gray-700">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-gray-800 transition-colors duration-300 !system-ui"
-                      placeholder="Enter your last name"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-3 !system-ui text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-gray-800 transition-colors duration-300 !system-ui"
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-3 !system-ui text-gray-700">
-                    Service Interested In
-                  </label>
-                  <select className="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-gray-800 transition-colors duration-300 !system-ui">
-                    <option>Select a service</option>
-                    <option>Consultation</option>
-                    <option>Design</option>
-                    <option>Photography</option>
-                    <option>Installation</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-3 !system-ui text-gray-700">
-                    Message
-                  </label>
-                  <textarea
-                    rows={4}
-                    className="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-gray-800 transition-colors duration-300 !system-ui"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-
-                <GlobalButton
-                  text="Submit Inquiry"
-                  className="px-8 py-3 border border-gray-800 text-gray-800 hover:border-white hover:text-gray-800 transition-all duration-300"
-                />
-              </form>
-            </div>
-
-            {/* Images Section */}
-            <div>
-              {/* Main Portfolio Image */}
-              <div className="aspect-[4/3] relative overflow-hidden mb-6">
-                <Image
-                  src={portfolioImages[0]}
-                  alt="Portfolio Work Example"
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-
-              {/* Small Images Grid */}
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                {portfolioImages.slice(1, 3).map((src, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square relative overflow-hidden"
-                  >
-                    <Image
-                      src={src}
-                      alt={`Project example ${index + 1}`}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Additional Images Row */}
-              <div className="grid grid-cols-3 gap-6 mb-6">
-                {portfolioImages.slice(3).map((src, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square relative overflow-hidden"
-                  >
-                    <Image
-                      src={src}
-                      alt={`Work sample ${index + 1}`}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-700"
-                      sizes="(max-width: 768px) 33vw, 16vw"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Inspiration Text */}
-              <div className="py-6 border-t">
-                <h3 className="font-medium mb-2 !system-ui">Recent Work</h3>
-                <p className="text-sm text-gray-600 !system-ui">
-                  Browse through recent projects to get inspiration for your own
-                  vision.
-                </p>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Book;
+export default Contact;
