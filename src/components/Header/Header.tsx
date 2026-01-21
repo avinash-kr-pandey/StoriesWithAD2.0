@@ -172,31 +172,31 @@ export default function Header() {
   }, []);
 
   // Update background state based on hover
-useEffect(() => {
-  if (hovered) {
-    setShouldShowBg(true);
-    setPrevHovered(hovered);
-  } else {
-    // Always hide background when nothing is hovered
-    const timer = setTimeout(() => {
-      setShouldShowBg(false);
-    }, 300);
-    return () => clearTimeout(timer);
-  }
-}, [hovered]);
+  useEffect(() => {
+    if (hovered) {
+      setShouldShowBg(true);
+      setPrevHovered(hovered);
+    } else {
+      // Always hide background when nothing is hovered
+      const timer = setTimeout(() => {
+        setShouldShowBg(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [hovered]);
 
-// Additional fix for dropdown mouse leave
-const handleDropdownMouseLeave = (e: React.MouseEvent) => {
-  const relatedTarget = e.relatedTarget as HTMLElement;
-  const isMovingToNav = navRef.current?.contains(relatedTarget);
-  
-  if (!isMovingToNav) {
-    setTimeout(() => {
-      setHovered(null);
-      setShouldShowBg(false); // Explicitly reset background
-    }, 150);
-  }
-};
+  // Additional fix for dropdown mouse leave
+  const handleDropdownMouseLeave = (e: React.MouseEvent) => {
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    const isMovingToNav = navRef.current?.contains(relatedTarget);
+
+    if (!isMovingToNav) {
+      setTimeout(() => {
+        setHovered(null);
+        setShouldShowBg(false); // Explicitly reset background
+      }, 150);
+    }
+  };
 
   // Clean up timeouts
   useEffect(() => {
@@ -310,7 +310,7 @@ const handleDropdownMouseLeave = (e: React.MouseEvent) => {
                       >
                         {term}
                       </button>
-                    )
+                    ),
                   )}
                 </div>
               </div>
@@ -320,21 +320,21 @@ const handleDropdownMouseLeave = (e: React.MouseEvent) => {
       </AnimatePresence>
 
       {/* Main Header Container */}
-<div
-  className={`relative z-50 transition-all duration-300 ${
-    shouldShowBg && hovered
-      ? hovered && hasDropdown(hovered)
-        ? "bg-[#eae1d1]"
-        : "bg-[#eae1d1]/80"
-      : isFixed
-      ? "bg-[#eae1d1]"
-      : "bg-transparent"
-  } ${isFixed ? "fixed top-0 left-0 border-b border-black" : ""}`}
-  style={{
-    position: searchOpen ? "relative" : undefined,
-    zIndex: searchOpen ? 40 : 50,
-  }}
->
+      <div
+        className={`relative z-50 transition-all duration-300 ${
+          shouldShowBg && hovered
+            ? hovered && hasDropdown(hovered)
+              ? "bg-[#eae1d1]"
+              : "bg-[#eae1d1]/80"
+            : isFixed
+              ? "bg-[#eae1d1]"
+              : "bg-transparent"
+        } ${isFixed ? "fixed top-0 left-0 border-b border-black" : ""}`}
+        style={{
+          position: searchOpen ? "relative" : undefined,
+          zIndex: searchOpen ? 40 : 50,
+        }}
+      >
         {/* Top newsletter bar */}
         <div
           className="
@@ -510,105 +510,78 @@ const handleDropdownMouseLeave = (e: React.MouseEvent) => {
             ))}
           </nav>
 
-
-
-
-
-
-
           {/* Desktop Dropdown - USING SPRAT CONDENSED */}
-       <AnimatePresence>
-  {hoveredItem && hoveredItem.submenu.length > 0 && (
-    <motion.div
-      ref={dropdownRef}
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="absolute top-full left-0 w-full shadow-md text-black z-50 overflow-hidden hidden md:block bg-[#eae1d1]"
-      style={{
-        marginTop: "0px",
-        pointerEvents: "auto",
-      }}
-      onMouseEnter={() => {
-        setHovered(hoveredItem.name);
-      }}
-      onMouseLeave={(e) => {
-        const relatedTarget = e.relatedTarget as HTMLElement;
-        const isMovingToNav = navRef.current?.contains(relatedTarget);
+          <AnimatePresence>
+            {hoveredItem && hoveredItem.submenu.length > 0 && (
+              <motion.div
+                ref={dropdownRef}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute top-full left-0 w-full shadow-md text-black z-50 overflow-hidden hidden md:block bg-[#eae1d1]"
+                style={{
+                  marginTop: "0px",
+                  pointerEvents: "auto",
+                }}
+                onMouseEnter={() => {
+                  setHovered(hoveredItem.name);
+                }}
+                onMouseLeave={(e) => {
+                  const relatedTarget = e.relatedTarget as HTMLElement;
+                  const isMovingToNav = navRef.current?.contains(relatedTarget);
 
-        if (!isMovingToNav) {
-          setTimeout(() => {
-            setHovered(null);
-          }, 150);
-        }
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* 4 इमेजेस वाला ग्रिड */}
-        <div className="grid grid-cols-4 gap-6">
-          {hoveredItem.submenu.map((sub, index) => (
-            <Link
-              key={sub.name}
-              href={sub.path}
-              className="group relative"
-              onClick={() => setHovered(null)}
-            >
-              {/* इमेज कंटेनर */}
-              <div className="w-full h-48 relative overflow-hidden rounded-lg">
-                <Image
-                  src={sub.image}
-                  alt={sub.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, 25vw"
-                />
-                
-                {/* टाइटल - इमेज के ऊपर ओवरले */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                
-                {/* टाइटल टेक्स्ट - इमेज के ऊपर */}
-                <div className="absolute bottom-3 left-0 right-0 text-center">
-                  <span className="text-sm uppercase tracking-wider font-[family-name:var(--FONT-STACK-HEADING)] font-normal text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {sub.name}
-                  </span>
+                  if (!isMovingToNav) {
+                    setTimeout(() => {
+                      setHovered(null);
+                    }, 150);
+                  }
+                }}
+              >
+                <div className="max-w-7xl mx-auto px-6 py-8">
+                  <div className="grid grid-cols-4 gap-6">
+                    {hoveredItem.submenu.map((sub, index) => (
+                      <Link
+                        key={sub.name}
+                        href={sub.path}
+                        className="group relative"
+                        onClick={() => setHovered(null)}
+                      >
+                        <div className="w-full h-48 relative overflow-hidden rounded-lg">
+                          <Image
+                            src={sub.image}
+                            alt={sub.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, 25vw"
+                          />
+
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent rounded-lg"></div>
+
+                          <div className="absolute bottom-3 left-0 right-0 text-center">
+                            <span className="text-sm uppercase tracking-wider font-[family-name:var(--FONT-STACK-HEADING)] font-normal text-white">
+                              {sub.name}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="text-center mt-8">
+                    <Link
+                      href={hoveredItem.path}
+                      className="inline-block text-sm uppercase tracking-wider border-b border-gray-800 pb-1 hover:border-black transition-colors font-[family-name:var(--FONT-STACK-HEADING)]"
+                      onClick={() => setHovered(null)}
+                    >
+                      View All {hoveredItem.name}
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        
-        {/* Optional: सभी सेवाएं देखें लिंक */}
-        <div className="text-center mt-8">
-          <Link
-            href={hoveredItem.path}
-            className="inline-block text-sm uppercase tracking-wider border-b border-gray-800 pb-1 hover:border-black transition-colors font-[family-name:var(--FONT-STACK-HEADING)]"
-            onClick={() => setHovered(null)}
-          >
-            View All {hoveredItem.name}
-          </Link>
-        </div>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         {/* MOBILE SIDE MENU - USING SPRAT CONDENSED */}
         <AnimatePresence>

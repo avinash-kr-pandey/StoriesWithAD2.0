@@ -730,7 +730,7 @@ const Reels = () => {
 
         {/* Desktop Instructions */}
         <div className="hidden sm:block text-center text-gray-500 text-sm mt-10">
-          <div className="inline-flex items-center gap-6  px-6 py-3 rounded-full border border-white/80">
+          <div className="inline-flex items-center gap-6  px-6 py-3 rounded-full border border-gray-600">
             <div className="flex items-center gap-2">
               <svg
                 className="w-4 h-4"
@@ -772,6 +772,7 @@ const Reels = () => {
               </svg>
               <span className="text-gray-800 font-system">
                 Click for fullscreen
+
               </span>
             </div>
             <div className="h-4 w-px bg-gray-600" />
