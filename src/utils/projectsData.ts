@@ -88,8 +88,7 @@ export const projects: Project[] = [
       "Adjustable height desk with storage designed for growing children.",
     detailedDescription:
       "This ergonomic study desk grows with your child, featuring height adjustment from 24″ to 32″. Includes built-in cable management, book storage, and an anti-tip mechanism. The rounded corners and non-toxic finishes ensure safety, while the colorful options appeal to children.",
-    image:
-      "https://images.unsplash.com/photo-1512389055482-56c2139d96c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://m.media-amazon.com/images/I/51+3CUBEvoL.jpg",
     tags: ["Children", "Adjustable", "Study", "Safe"],
     githubLink: "https://github.com",
     liveLink: "https://kids-desk.example.com",

@@ -27,19 +27,9 @@ export default function ProjectsPage() {
   const [filter, setFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [mounted, setMounted] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Get all unique categories
-  const categories = useMemo(() => {
-    const categorySet = new Set<string>();
-    projects.forEach((project) => {
-      categorySet.add(project.category);
-    });
-    return Array.from(categorySet);
   }, []);
 
   // Filter projects
@@ -71,7 +61,7 @@ export default function ProjectsPage() {
     <div className="min-h-screen pt-32 font-['system-ui',sans-serif]">
       {/* Hero Header - Simplified */}
       <section className="py-8 md:py-12 px-4 md:px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <div className="text-start mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-['system-ui',sans-serif]">
               PORTFOLIO
@@ -82,7 +72,7 @@ export default function ProjectsPage() {
 
       {/* Projects Grid - Simple Image + Title Only */}
       <section className="pb-16 px-4 md:px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={`${filter}-${searchQuery}`}
@@ -101,28 +91,21 @@ export default function ProjectsPage() {
                 >
                   <Link href={`/projects/${project.id}`}>
                     {/* Image Container with Increased Height */}
-                    <div
-                      className="relative overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 
-                    aspect-[4/3.2] mb-4"
-                    >
-                      {" "}
-                      {/* Changed from aspect-[4/3] to aspect-[4/3.2] */}
+                    <div className="relative overflow-hidden aspect-[4/4.5] mb-4">
                       <Image
                         src={project.image}
                         alt={project.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority={index < 6}
                       />
-                      {/* Gradient Overlay on Hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     {/* Title Only */}
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-black transition-colors duration-300 text-start px-1">
+                    <p className="text-2xl font-medium text-gray-700 leading-relaxed text-start">
                       {project.title}
-                    </h3>
+                    </p>
                   </Link>
                 </motion.div>
               ))}
