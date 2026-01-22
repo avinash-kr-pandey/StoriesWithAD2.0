@@ -91,7 +91,7 @@ export default function ProjectsPage() {
                 >
                   <Link href={`/projects/${project.id}`}>
                     {/* Image Container with Increased Height */}
-                    <div className="relative overflow-hidden aspect-[4/4.5] mb-4">
+                    <div className="relative overflow-hidden aspect-[4/3.5] mb-4">
                       <Image
                         src={project.image}
                         alt={project.title}
@@ -103,9 +103,9 @@ export default function ProjectsPage() {
                     </div>
 
                     {/* Title Only */}
-                    <p className="text-2xl font-medium text-gray-700 leading-relaxed text-start">
+                    <h3 className="text-2xl font-medium text-gray-700 leading-relaxed text-start">
                       {project.title}
-                    </p>
+                    </h3>
                   </Link>
                 </motion.div>
               ))}

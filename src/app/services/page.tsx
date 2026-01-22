@@ -28,9 +28,9 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-20 mb-12">
       {/* Main title section */}
-      <div className="pt-10 px-6 lg:px-16">
+      <div className="pt-10 px-6 md:px-12 ">
         <h1 className="text-3xl md:text-5xl font-bold uppercase py-8 pt-24 tracking-tight">
           Services
         </h1>
@@ -40,17 +40,15 @@ const Services = () => {
       {sections.map((section, index) => (
         <div
           key={index}
-          className="min-h-[90vh] flex items-center justify-center py-20"
+          className="min-h-[90vh] flex items-center justify-center my-0"
         >
-          <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="w-full max-w-full mx-auto">
             <div
-              className={`flex flex-col ${
-                index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-              } items-center gap-12 lg:gap-20`}
+              className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-center`}
             >
-              {/* Image Section - Height increased and responsive */}
+              {/* Image Section */}
               <div className="lg:w-1/2 w-full">
-                <div className="h-[60vh] md:h-[60vh] lg:h-[70vh] relative overflow-hidden group">
+                <div className="h-[60vh] md:h-[80vh] lg:h-[120vh] relative overflow-hidden group">
                   <Image
                     src={section.image}
                     alt={section.title}
@@ -62,20 +60,24 @@ const Services = () => {
                 </div>
               </div>
 
-              {/* Text Content Section */}
-              <div className="lg:w-1/2 w-full">
-                <div className="max-w-2xl mx-auto lg:mx-0">
-                  <h2 className="text-3xl lg:text-3xl text-gray-700 leading-relaxed font-thin pb-12">
+              {/* Text Content */}
+              <div
+                className={`lg:w-1/2 w-full px-6 md:px-12 ${
+                  index === 1 || index === 2 ? "bg-[#ccaf85] h-[120vh]" : ""
+                }`}
+              >
+                <div className="max-w-2xl mx-auto  lg:mx-0 h-full flex flex-col justify-center py-10 lg:py-0">
+                  <h2 className="text-3xl md:text-4xl font-bold uppercase py-8 pt-24 tracking-tight md:px-24 px-0">
                     {section.title}
                   </h2>
-                  <div className="space-y-4 text-md">
+                  <div className="space-y-4 text-md md:px-24 px-0">
                     {section.content
                       .split(".")
                       .filter((sentence) => sentence.trim())
                       .map((sentence, i) => (
                         <p
                           key={i}
-                          className=" text-gray-700 leading-relaxed font-thin text-justify"
+                          className="text-gray-700 leading-relaxed font-thin text-justify"
                         >
                           {sentence.trim() +
                             (i <
