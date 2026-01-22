@@ -11,25 +11,18 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20 w-full">
-      {/* Heading */}
-      <div className="pt-10 px-6 lg:px-16">
-        <h1 className="text-5xl font-light uppercase py-8 pt-24 !system-ui">
-          About
-        </h1>
-      </div>
-
+    <div className="min-h-screen pt-32 w-full">
       {/* Introduction Section */}
-      <div className="py-12 px-6 lg:px-16">
+      <div className="py-12 ">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           {/* LEFT : TEXT */}
-          <div className="md:pl-12 pl-0">
-            <h2 className="text-2xl lg:text-4xl font-light mb-8 leading-tight !system-ui pb-8 text-justify">
+          <div className="md:pl-12 pl-0 ">
+            <h2 className="text-2xl lg:text-4xl font-light mb-8 leading-tight !system-ui pb-8 justify-center px-16">
               STORIES WITH AD JONES IS ONE OF AUSTRALIA&lsquo;S LEADING INTERIOR
               STYLISTS.
             </h2>
 
-            <div className="space-y-4">
+            <div className="space-y-4 px-16">
               <p className="mt-2 text-md text-gray-700 leading-relaxed font-thin text-justify">
                 With a diverse portfolio ranging from residential and commercial
                 clients to lifestyle brands and editorial publications, Stories
