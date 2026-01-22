@@ -111,7 +111,15 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
   return (
     <>
-      <section className=" py-12 px-4">
+      <section
+        className=" py-12 px-4"
+        style={{
+          fontFamily: "system-ui, sans-serif",
+          letterSpacing: "0.08em",
+          lineHeight: "1.6",
+          fontWeight: 300,
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
@@ -125,11 +133,37 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               <div className="flex items-center gap-1">
                 {renderStars(Math.floor(product.rating))}
               </div>
-              <span className="text-lg font-semibold text-gray-700">
+              <span
+                className="text-lg font-semibold text-gray-700"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  letterSpacing: "0.08em",
+                  lineHeight: "1.6",
+                  fontWeight: 500,
+                }}
+              >
                 {product.rating}/5
               </span>
-              <span className="text-gray-500">•</span>
-              <span className="text-gray-600">
+              <span
+                className="text-gray-500"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  letterSpacing: "0.08em",
+                  lineHeight: "1.6",
+                  fontWeight: 500,
+                }}
+              >
+                •
+              </span>
+              <span
+                className="text-gray-600"
+                style={{
+                  fontFamily: "system-ui, sans-serif",
+                  letterSpacing: "0.08em",
+                  lineHeight: "1.6",
+                  fontWeight: 500,
+                }}
+              >
                 {reviewsCount} {reviewsCount === 1 ? "Review" : "Reviews"}
               </span>
             </div>
@@ -192,149 +226,10 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
             </div>
           )}
 
-          {/* Write a Review CTA */}
-          <div className="text-center mt-10">
-            <button
-              onClick={() => setShowReviewModal(true)}
-              className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
-            >
-              Write a Review
-            </button>
-          </div>
+         
         </div>
       </section>
 
-      {/* Review Modal */}
-      {showReviewModal && (
-        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-800">
-                Write a Review
-              </h3>
-              <button
-                onClick={() => setShowReviewModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6">
-              {/* Rating Stars */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Your Rating *
-                </label>
-                <div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => handleStarClick(star)}
-                      onMouseEnter={() => handleStarHover(star)}
-                      onMouseLeave={() => setHoverRating(0)}
-                      className="transition-transform hover:scale-110"
-                    >
-                      {star <= (hoverRating || formData.rating) ? (
-                        <Star className="w-8 h-8 text-yellow-500 fill-yellow-400" />
-                      ) : (
-                        <StarOff className="w-8 h-8 text-gray-300" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-                {formData.rating > 0 && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    You rated: {formData.rating} star
-                    {formData.rating > 1 ? "s" : ""}
-                  </p>
-                )}
-              </div>
-
-              {/* Name */}
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Your Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
-                  placeholder="Enter your name"
-                  required
-                />
-              </div>
-
-              {/* Email */}
-              <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Your Email *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-
-              {/* Comment */}
-              <div className="mb-6">
-                <label
-                  htmlFor="comment"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Your Review *
-                </label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  value={formData.comment}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all resize-none"
-                  placeholder="Share your experience with this product..."
-                  required
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setShowReviewModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={!isFormValid}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-500 to-yellow-500 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all"
-                >
-                  Submit Review
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 }

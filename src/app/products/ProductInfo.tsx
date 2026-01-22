@@ -6,6 +6,8 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/utils/products";
 import toast from "react-hot-toast";
+import { motion, MotionConfig } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 interface ProductInfoProps {
   product: Product;
@@ -148,7 +150,12 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   return (
     <div
       className="min-h-screen w-full overflow-hidden flex items-center justify-center py-8"
-     
+      style={{
+        fontFamily: "system-ui, sans-serif",
+        letterSpacing: "0.08em",
+        lineHeight: "1.6",
+        fontWeight: 500,
+      }}
     >
       <div className="max-w-7xl w-full">
         <div className="overflow-hidden">
@@ -264,10 +271,26 @@ export default function ProductInfo({ product }: ProductInfoProps) {
               {/* Category & Brand */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="bg-pink-500/10 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200">
+                  <span
+                    className="bg-pink-500/10 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200"
+                    style={{
+                      fontFamily: "system-ui, sans-serif",
+                      letterSpacing: "0.08em",
+                      lineHeight: "1.6",
+                      fontWeight: 500,
+                    }}
+                  >
                     {product.category}
                   </span>
-                  <span className="bg-blue-500/10 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200">
+                  <span
+                    className="bg-blue-500/10 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200"
+                    style={{
+                      fontFamily: "system-ui, sans-serif",
+                      letterSpacing: "0.08em",
+                      lineHeight: "1.6",
+                      fontWeight: 500,
+                    }}
+                  >
                     {product.brand || "Premium Brand"}
                   </span>
                 </div>
@@ -279,41 +302,132 @@ export default function ProductInfo({ product }: ProductInfoProps) {
               </h1>
 
               {/* Rating */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm">
+              <div className="flex items-center gap-3 my-4">
+                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm ">
                   {renderStars(product.rating)}
                 </div>
-                <span className="text-gray-700 font-medium text-sm">
+                <span
+                  className="text-gray-700 font-medium text-sm"
+                  style={{
+                    fontFamily: "system-ui, sans-serif",
+                    letterSpacing: "0.08em",
+                    lineHeight: "1.6",
+                    fontWeight: 500,
+                  }}
+                >
                   {product.rating}/5
                 </span>
                 <span className="text-gray-400">•</span>
-                <span className="text-gray-600 text-sm">
+                <span
+                  className="text-gray-600 text-sm"
+                  style={{
+                    fontFamily: "system-ui, sans-serif",
+                    letterSpacing: "0.08em",
+                    lineHeight: "1.6",
+                    fontWeight: 500,
+                  }}
+                >
                   {product.reviews} Reviews
                 </span>
               </div>
 
               {/* Price */}
-              <div className="space-y-1">
-                <div className="flex items-center gap-3">
-                  <p className="text-3xl font-bold text-gray-900">
-                    ${product.price}
-                  </p>
-                  {product.originalPrice && (
-                    <p className="text-xl text-gray-500 line-through">
-                      ${product.originalPrice}
-                    </p>
+              <div className="space-y-2">
+                <div className="space-y-2 relative">
+                  {/* Price Animation Container */}
+                  <div className="flex items-center gap-3 relative">
+                    <AnimatePresence>
+                      {product.originalPrice && (
+                        // Step 1: Original price big and centered
+                        <motion.div
+                          initial={{ scale: 2, opacity: 0, y: -20 }}
+                          animate={{ scale: 1, opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="relative flex items-center"
+                        >
+                          <p className="text-xl md:text-xl text-gray-500 font-bold z-10">
+                            ₹{product.originalPrice.toLocaleString("en-IN")}
+                          </p>
+
+                          {/* Step 2: Animated line cutting the price */}
+                          <motion.span
+                            className="absolute left-0 top-1/2 h-[2px] bg-black z-0"
+                            initial={{ width: 0 }}
+                            animate={{ width: "100%" }}
+                            transition={{
+                              duration: 1.2,
+                              ease: "easeInOut",
+                              delay: 0.5,
+                            }}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Step 3: Current Price Reveal */}
+                    <motion.p
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2, duration: 0.8 }}
+                      className="text-3xl font-bold text-gray-900"
+                    >
+                      ₹{product.price.toLocaleString("en-IN")}
+                    </motion.p>
+
+                    {/* Step 4: Discount Badge */}
+                    {discountPercentage > 0 && (
+                      <motion.span
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 2.5, duration: 0.5 }}
+                        className="bg-rose-100 text-rose-600 text-sm font-semibold px-2 py-1 rounded"
+                      >
+                        {discountPercentage}% OFF
+                      </motion.span>
+                    )}
+                  </div>
+
+                  {/* Discount Save Text */}
+                  {discountPercentage > 0 && product.originalPrice && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 3, duration: 0.5 }}
+                      className="text-green-600 font-medium text-sm"
+                    >
+                      You save ₹
+                      {(product.originalPrice - product.price).toLocaleString(
+                        "en-IN",
+                      )}
+                    </motion.p>
                   )}
+
+                  {/* Shipping Info */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 3.5, duration: 0.5 }}
+                    className="text-green-600 font-medium text-sm flex items-center gap-1"
+                  >
+                    <span>✓</span>
+                    {product.shippingInfo
+                      ? "Free shipping available"
+                      : "Standard shipping available"}
+                  </motion.p>
                 </div>
-                {discountPercentage > 0 && (
-                  <p className="text-green-600 font-semibold text-sm flex items-center gap-1">
-                    <span>💰</span>
-                    Save ${(product.originalPrice! - product.price).toFixed(
-                      2
-                    )}{" "}
-                    ({discountPercentage}% off)
+
+                {/* Discount Save Text */}
+                {discountPercentage > 0 && product.originalPrice && (
+                  <p className="text-green-600 font-medium text-sm">
+                    You save ₹
+                    {(product.originalPrice - product.price).toLocaleString(
+                      "en-IN",
+                    )}
                   </p>
                 )}
-                <p className="text-green-600 font-semibold text-sm flex items-center gap-1">
+
+                {/* Shipping Info */}
+                <p className="text-green-600 font-medium text-sm flex items-center gap-1">
                   <span>✓</span>
                   {product.shippingInfo
                     ? "Free shipping available"
@@ -458,7 +572,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-3 sm:py-4 px-2 font-medium text-sm sm:text-base border-b-2 whitespace-nowrap transition-all duration-300 ${
+                    className={`py-3 sm:py-4 px-2 font-medium text-sm sm:text-base border-b-2 whitespace-nowrap transition-all duration-300  ${
                       activeTab === tab.id
                         ? "border-pink-500 text-pink-600"
                         : "border-transparent text-gray-500 hover:text-gray-700"
@@ -473,10 +587,15 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             {/* Tabs Content */}
             <div className="p-4 sm:p-6">
               {activeTab === "description" && (
-                <div className="space-y-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                    Product Description
-                  </h3>
+                <div
+                  className="space-y-4"
+                  style={{
+                    fontFamily: "system-ui, sans-serif",
+                    letterSpacing: "0.08em",
+                    lineHeight: "1.6",
+                    fontWeight: 500,
+                  }}
+                >
                   <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
                     {product.description}
                   </p>
@@ -484,57 +603,162 @@ export default function ProductInfo({ product }: ProductInfoProps) {
               )}
 
               {activeTab === "details" && (
-                <div className="space-y-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                    Product Details
-                  </h3>
+                <div
+                  className="space-y-4"
+                  style={{
+                    fontFamily: "system-ui, sans-serif",
+                    letterSpacing: "0.08em",
+                    lineHeight: "1.6",
+                    fontWeight: 500,
+                  }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3 text-sm sm:text-base">
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           Dimensions
                         </span>
-                        <span className="text-gray-900">
+                        <span
+                          className="text-gray-900"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           {product.dimensions}
                         </span>
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           Material
                         </span>
-                        <span className="text-gray-900">
+                        <span
+                          className="text-gray-900"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           {product.material}
                         </span>
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           Warranty
                         </span>
-                        <span className="text-gray-900">
+                        <span
+                          className="text-gray-900"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           {product.warranty}
                         </span>
                       </div>
                     </div>
                     <div className="space-y-3 text-sm sm:text-base">
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           Category
                         </span>
-                        <span className="text-gray-900 capitalize">
+                        <span
+                          className="text-gray-900 capitalize"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           {product.category}
                         </span>
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">Stock</span>
-                        <span className="text-gray-900">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Stock
+                        </span>
+                        <span
+                          className="text-gray-900"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           {product.inStock
                             ? `In Stock (${product.stockQuantity})`
                             : "Out of Stock"}
                         </span>
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
-                        <span className="font-medium text-gray-600">SKU</span>
-                        <span className="text-gray-900">
+                        <span
+                          className="font-medium text-gray-600"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
+                          SKU
+                        </span>
+                        <span
+                          className="text-gray-900"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
                           PRD-{product.id.toString().padStart(6, "0")}
                         </span>
                       </div>
@@ -545,9 +769,6 @@ export default function ProductInfo({ product }: ProductInfoProps) {
 
               {activeTab === "features" && (
                 <div className="space-y-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                    Product Features
-                  </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {product.features.map((feature, index) => (
                       <div
@@ -555,7 +776,17 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                         className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                       >
                         <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                        <span className="text-gray-700">{feature}</span>
+                        <span
+                          className="text-gray-700"
+                          style={{
+                            fontFamily: "system-ui, sans-serif",
+                            letterSpacing: "0.08em",
+                            lineHeight: "1.6",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {feature}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -563,57 +794,62 @@ export default function ProductInfo({ product }: ProductInfoProps) {
               )}
 
               {activeTab === "reviews" && (
-                <div className="space-y-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                    Customer Reviews
-                  </h3>
-                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
+                <div className="space-y-6">
+                  {/* Overall Rating Summary */}
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900">
+                      <div className="text-4xl font-bold text-gray-900">
                         {product.rating}
                       </div>
-                      <div className="flex justify-center gap-1">
+                      <div className="flex justify-center gap-1 mt-1">
                         {renderStars(product.rating)}
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        Based on {product.reviews} reviews
+                      <div className="text-gray-500 text-sm mt-2">
+                        Based on {product.reviews} review
+                        {product.reviews > 1 ? "s" : ""}
                       </div>
                     </div>
                   </div>
 
+                  {/* Individual Reviews */}
                   {product.reviewsList && product.reviewsList.length > 0 ? (
                     <div className="space-y-4">
                       {product.reviewsList.map((review, index) => (
                         <div
                           key={index}
-                          className="border-b border-gray-200 pb-4 last:border-b-0"
+                          className="flex flex-col sm:flex-row gap-4 p-4 bg-white rounded-xl shadow hover:shadow-md transition-shadow border border-gray-100"
                         >
-                          <div className="flex items-center gap-3 mb-2">
-                            <img
-                              src={review.avatar}
-                              alt={review.name}
-                              className="w-8 h-8 rounded-full"
-                            />
-                            <div>
+                          {/* Avatar */}
+                          <img
+                            src={review.avatar}
+                            alt={review.name}
+                            className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                          />
+
+                          {/* Review Content */}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between flex-wrap gap-2">
                               <p className="font-semibold text-gray-900">
                                 {review.name}
                               </p>
-                              <div className="flex items-center gap-1">
-                                {renderStars(review.rating)}
-                                <span className="text-gray-500 text-sm ml-2">
-                                  {review.date}
-                                </span>
-                              </div>
+                              <span className="text-gray-400 text-sm">
+                                {review.date}
+                              </span>
                             </div>
+
+                            <div className="flex items-center gap-1 mt-1">
+                              {renderStars(review.rating)}
+                            </div>
+
+                            <p className="text-gray-700 text-sm mt-2">
+                              {review.comment}
+                            </p>
                           </div>
-                          <p className="text-gray-600 text-sm">
-                            {review.comment}
-                          </p>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center text-gray-500 py-8">
+                    <div className="text-center text-gray-400 py-12 italic bg-gray-50 rounded-lg shadow-sm">
                       No reviews yet. Be the first to review this product!
                     </div>
                   )}

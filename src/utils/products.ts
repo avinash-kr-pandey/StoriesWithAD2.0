@@ -40,6 +40,7 @@ export const products: Product[] = [
     name: "Modern Sofa Set",
     price: 1299.99,
     originalPrice: 1599.99,
+
     category: "living",
     image: "/PICTURES/_DEV1448.jpg",
     images: [
@@ -165,12 +166,13 @@ export const products: Product[] = [
     price: 1899.99,
     originalPrice: 2299.99,
     category: "bedroom",
-    image: "/PICTURES/_DEV1460.jpg",
+    image: "/PICTURES/_DEV1472.jpg",
     images: [
       "/PICTURES/_DEV1460.jpg",
       "/PICTURES/_DEV1463.jpg",
       "/PICTURES/_DEV1469.jpg",
-      "/PICTURES/_DEV1472.jpg",
+
+      "/PICTURES/_DEV1460.jpg",
     ],
     rating: 4.9,
     reviews: 156,

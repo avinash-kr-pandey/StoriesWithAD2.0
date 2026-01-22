@@ -293,6 +293,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 Discover our complete collection of furniture designs
               </p>
             </Link>
+            
           </div>
         </div>
       </div>

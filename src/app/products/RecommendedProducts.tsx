@@ -96,7 +96,15 @@ export default function RecommendedProducts({
   };
 
   return (
-    <section className="py-8 sm:py-10 md:py-12 px-3 sm:px-6 md:px-10 ">
+    <section
+      className="py-8 sm:py-10 md:py-12 px-3 sm:px-6 md:px-10 "
+      style={{
+        fontFamily: "system-ui, sans-serif",
+        letterSpacing: "0.08em",
+        lineHeight: "1.6",
+        fontWeight: 300,
+      }}
+    >
       <div className="max-w-full mx-auto">
         {/* Section Header */}
         <div className="text-center mb-10">
