@@ -1,5 +1,5 @@
 // app/projects/[id]/page.tsx
-import { projects } from "@/utils/projectsData";
+import { products, Product } from "@/utils/products";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Calendar, Ruler, Palette } from "lucide-react";
@@ -9,76 +9,123 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+// Extended interface with properties needed for the detail page
+interface ProjectDetail extends Product {
+  date: string;
+  detailedDescription: string;
+  tags: string[];
+  materials: string[];
+}
+
+// Map products to project details with additional properties
+const projectDetails: Record<number, ProjectDetail> = {
+  1: {
+    // ... all properties from products[0]
+    ...products[0],
+    date: "2024",
+    detailedDescription:
+      "A modern sofa set designed for contemporary living spaces with optimal comfort and style.",
+    tags: ["Modern", "Comfort", "Minimalist", "Premium"],
+    materials: [
+      "Premium Fabric",
+      "Solid Wood Frame",
+      "High-Density Foam",
+      "Stain-resistant Coating",
+    ],
+  },
+  2: {
+    ...products[1],
+    date: "2024",
+    detailedDescription:
+      "Scandinavian dining table combining minimalist aesthetics with functional design.",
+    tags: ["Scandinavian", "Minimalist", "Natural", "Eco-friendly"],
+    materials: ["Solid Oak Wood", "Natural Finish", "Metal Hardware"],
+  },
+  3: {
+    ...products[2],
+    date: "2024",
+    detailedDescription:
+      "Luxury king bed frame with built-in storage and premium comfort features.",
+    tags: ["Luxury", "Storage", "Comfort", "Premium"],
+    materials: ["Premium Fabric", "Solid Wood", "Metal Drawers", "Memory Foam"],
+  },
+  4: {
+    ...products[3],
+    date: "2024",
+    detailedDescription:
+      "Ergonomic office chair designed for all-day comfort and productivity.",
+    tags: ["Ergonomic", "Office", "Comfort", "Adjustable"],
+    materials: ["Premium Mesh", "Aluminum Base", "PU Leather", "Memory Foam"],
+  },
+  5: {
+    ...products[4],
+    date: "2024",
+    detailedDescription:
+      "Weather-resistant outdoor furniture set for modern patio living.",
+    tags: ["Outdoor", "Weather-resistant", "Comfortable", "Modern"],
+    materials: [
+      "Synthetic Rattan",
+      "Aluminum Frame",
+      "Outdoor Fabric",
+      "UV-protected Foam",
+    ],
+  },
+  6: {
+    ...products[5],
+    date: "2024",
+    detailedDescription:
+      "Modern nested coffee tables with tempered glass and sleek metal frame.",
+    tags: ["Modern", "Glass", "Minimalist", "Space-saving"],
+    materials: ["Tempered Glass", "Powder-coated Metal", "Protective Coating"],
+  },
+};
+
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { id } = await params;
   const projectId = parseInt(id);
-  const project = projects.find((p) => p.id === projectId);
 
-  if (!project) {
+  // Find the base product
+  const product = products.find((p) => p.id === projectId);
+
+  // Get the extended project details
+  const project = projectDetails[projectId];
+
+  if (!project || !product) {
     notFound();
   }
 
   return (
-    <div className="min-h-screen pt-32">
+    <div
+      className="min-h-screen pt-32"
+      style={{
+        fontFamily: "system-ui, sans-serif",
+        letterSpacing: "0.08em",
+        lineHeight: "1.6",
+        fontWeight: 500,
+      }}
+    >
       <div className="max-w-8xl mx-auto px-4 md:px-8 py-8 md:py-12">
         {/* Project Header */}
         <div className="mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#eae1d1] rounded-full mb-6">
             <div className="w-2 h-2 bg-[#d4c9b8] rounded-full" />
-            <span
-              className="text-sm text-gray-500 font-thin leading-relaxed"
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                letterSpacing: "",
-                lineHeight: "1.6",
-                fontWeight: 500,
-              }}
-            >
+            <span className="text-sm text-gray-500 font-medium">
               {project.category}
             </span>
           </div>
 
-          {/* HEADING (UNCHANGED) */}
           <h1 className="text-5xl md:text-4xl font-bold text-[#171717] mb-6 leading-tight pb-6">
-            {project.title}
+            {project.name}
           </h1>
 
           <div className="flex flex-wrap items-center gap-6">
-            <div
-              className="flex items-center gap-2 "
-              style={{
-                fontFamily: "system-ui, sans-serif",
-                letterSpacing: "",
-                lineHeight: "1.6",
-                fontWeight: 500,
-              }}
-            >
+            <div className="flex items-center gap-2 text-gray-700 font-medium">
               <Calendar className="w-5 h-5" />
-              <div
-                className="flex flex-wrap items-center gap-2"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  letterSpacing: "",
-                  lineHeight: "1.6",
-                  fontWeight: 500,
-                }}
-              >
-                {project.date}
-              </div>
+              <div>{project.date}</div>
             </div>
-            <div className="flex items-center gap-2 text-gray-700 font-thin leading-relaxed">
+            <div className="flex items-center gap-2 text-gray-700 font-medium">
               <Ruler className="w-5 h-5" />
-              <p
-                className="flex flex-wrap items-center gap-2"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  letterSpacing: "",
-                  lineHeight: "1.6",
-                  fontWeight: 500,
-                }}
-              >
-                {project.dimensions}
-              </p>
+              <p>{project.dimensions}</p>
             </div>
           </div>
         </div>
@@ -89,10 +136,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <div className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden rounded-2xl bg-gradient-to-br from-[#f5f0e6] to-white border border-[#eae1d1]">
               <Image
                 src={project.image}
-                alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
-                width={400}
-                height={400}
+                alt={project.name}
+                fill
+                className="object-cover transition-transform duration-700 hover:scale-[1.03]"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 66vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
             </div>
@@ -106,7 +153,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <div className="w-10 h-10 bg-gradient-to-br from-[#f5f0e6] to-white rounded-lg flex items-center justify-center border border-[#eae1d1]">
                   <Palette className="w-5 h-5 text-gray-700" />
                 </div>
-                {/* HEADING */}
                 <h3 className="text-xl font-bold text-[#171717]">
                   Materials & Finish
                 </h3>
@@ -114,35 +160,25 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
               <div className="space-y-4">
                 {project.materials.map((material, index) => (
-                  <div key={material} className="flex items-center gap-3">
-                    <div
-                      className="flex items-center gap-2 "
+                  <div key={index} className="flex items-center gap-3">
+                    <span
+                      className="text-gray-500 w-6"
                       style={{
                         fontFamily: "system-ui, sans-serif",
-                        letterSpacing: "",
+                        letterSpacing: "0.08em",
                         lineHeight: "1.6",
                         fontWeight: 500,
                       }}
                     >
-                      <span
-                        className="flex items-center gap-2 "
-                        style={{
-                          fontFamily: "system-ui, sans-serif",
-                          letterSpacing: "",
-                          lineHeight: "1.6",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {index + 1}
-                      </span>
-                    </div>
+                      {index + 1}.
+                    </span>
                     <span
-                      className="flex items-center gap-2 "
+                      className="text-gray-700"
                       style={{
                         fontFamily: "system-ui, sans-serif",
-                        letterSpacing: "",
+                        letterSpacing: "0.08em",
                         lineHeight: "1.6",
-                        fontWeight: 400,
+                        fontWeight: 500,
                       }}
                     >
                       {material}
@@ -154,7 +190,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
             {/* Design Features */}
             <div className="bg-white border border-[#eae1d1] rounded-2xl p-6">
-              {/* HEADING */}
               <h3 className="text-xl font-bold text-[#171717] mb-8 pb-8">
                 Design Features
               </h3>
@@ -166,10 +201,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     className="px-4 py-2 bg-gradient-to-br from-[#f5f0e6] to-white border border-[#eae1d1] rounded-full hover:border-[#d4c9b8] transition-colors"
                   >
                     <span
-                      className="flex items-center gap-2"
+                      className="text-gray-700 font-medium"
                       style={{
                         fontFamily: "system-ui, sans-serif",
-                        letterSpacing: "",
+                        letterSpacing: "0.08em",
                         lineHeight: "1.6",
                         fontWeight: 500,
                       }}
@@ -187,34 +222,18 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <div className="grid lg:grid-cols-3 gap-8 mt-12">
           <div className="lg:col-span-2">
             <div className="bg-white border border-[#eae1d1] rounded-2xl p-8">
-              {/* HEADING */}
               <h2 className="text-3xl font-bold text-[#171717] mb-6">
                 Design Philosophy
               </h2>
 
-              <p
-                className="flex items-center gap-2"
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  letterSpacing: "",
-                  lineHeight: "1.6",
-                  fontWeight: 200,
-                }}
-              >
+              <p className="text-gray-700 leading-relaxed mb-6">
                 {project.detailedDescription}
               </p>
 
               <div className="grid md:grid-cols-2 gap-6 mt-8">
                 <div className="space-y-3">
                   <h4 className="font-bold text-[#171717] py-2">Ergonomics</h4>
-                  <p
-                    style={{
-                      fontFamily: "system-ui, sans-serif",
-                      letterSpacing: "",
-                      lineHeight: "1.6",
-                      fontWeight: 200,
-                    }}
-                  >
+                  <p className="text-gray-600">
                     Designed for optimal comfort and user experience, ensuring
                     both aesthetic appeal and practical functionality.
                   </p>
@@ -224,14 +243,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   <h4 className="font-bold text-[#171717] py-2">
                     Sustainability
                   </h4>
-                  <p
-                    style={{
-                      fontFamily: "system-ui, sans-serif",
-                      letterSpacing: "",
-                      lineHeight: "1.6",
-                      fontWeight: 200,
-                    }}
-                  >
+                  <p className="text-gray-600">
                     Using responsibly sourced materials and environmentally
                     conscious manufacturing processes.
                   </p>
@@ -277,23 +289,15 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
             <Link
               href="/projects"
-              className="block bg-white border border-[#eae1d1] hover:border-[#d4c9b8] rounded-2xl p-6 text-center transition-all hover:bg-gray-300"
+              className="block bg-white border border-[#eae1d1] hover:border-[#d4c9b8] rounded-2xl p-6 text-center transition-all hover:bg-gray-50"
             >
               <h4 className="font-bold text-[#171717] mb-2">
                 Explore More Designs
               </h4>
-              <p
-                style={{
-                  fontFamily: "system-ui, sans-serif",
-                  letterSpacing: "",
-                  lineHeight: "1.6",
-                  fontWeight: 200,
-                }}
-              >
+              <p className="text-gray-600">
                 Discover our complete collection of furniture designs
               </p>
             </Link>
-            
           </div>
         </div>
       </div>
@@ -303,8 +307,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
 // Static Params
 export async function generateStaticParams() {
-  return projects.map((project) => ({
-    id: project.id.toString(),
+  return products.map((product) => ({
+    id: product.id.toString(),
   }));
 }
 
@@ -315,15 +319,15 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const projectId = parseInt(id);
-  const project = projects.find((p) => p.id === projectId);
+  const productId = parseInt(id);
+  const product = products.find((p) => p.id === productId);
 
-  if (!project) {
-    return { title: "Project Not Found" };
+  if (!product) {
+    notFound();
   }
 
   return {
-    title: `${project.title} | Modern Furniture Design`,
-    description: project.description,
+    title: `${product.name} | Modern Furniture Design`,
+    description: product.description,
   };
 }

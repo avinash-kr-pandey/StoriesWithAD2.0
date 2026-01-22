@@ -2,7 +2,9 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { projects } from "@/utils/projectsData";
+// import { projects } from "@/utils/projectsData";
+import { Product, products } from "@/utils/products";
+
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,28 +34,25 @@ export default function ProjectsPage() {
     setMounted(true);
   }, []);
 
-  // Filter projects
-  const filteredProjects = useMemo(() => {
-    let result = [...projects];
+ const filteredProjects = useMemo(() => {
+   let result = [...products];
 
-    // Apply category filter
-    if (filter !== "all") {
-      result = result.filter((project) => project.category === filter);
-    }
+   if (filter !== "all") {
+     result = result.filter((product) => product.category === filter);
+   }
 
-    // Apply search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (project) =>
-          project.title.toLowerCase().includes(query) ||
-          project.description.toLowerCase().includes(query) ||
-          project.tags.some((tag) => tag.toLowerCase().includes(query)),
-      );
-    }
+   if (searchQuery) {
+     const query = searchQuery.toLowerCase();
+     result = result.filter(
+       (product) =>
+         product.name.toLowerCase().includes(query) ||
+         product.description.toLowerCase().includes(query),
+     );
+   }
 
-    return result;
-  }, [filter, searchQuery]);
+   return result;
+ }, [filter, searchQuery]);
+
 
   if (!mounted) return null;
 
@@ -81,20 +80,20 @@ export default function ProjectsPage() {
               exit={{ opacity: 0 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {filteredProjects.map((project: Project, index) => (
+              {filteredProjects.map((product: Product, index) => (
                 <motion.div
-                  key={project.id}
+                  key={product.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   className="group"
                 >
-                  <Link href={`/projects/${project.id}`}>
-                    {/* Image Container with Increased Height */}
+                  <Link href={`/projects/${product.id}`}>
+                    {/* Image */}
                     <div className="relative overflow-hidden aspect-[4/3.5] mb-4">
                       <Image
-                        src={project.image}
-                        alt={project.title}
+                        src={product.image}
+                        alt={product.name}
                         fill
                         className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -102,9 +101,9 @@ export default function ProjectsPage() {
                       />
                     </div>
 
-                    {/* Title Only */}
+                    {/* Name */}
                     <h3 className="text-2xl font-medium text-gray-700 leading-relaxed text-start">
-                      {project.title}
+                      {product.name}
                     </h3>
                   </Link>
                 </motion.div>
