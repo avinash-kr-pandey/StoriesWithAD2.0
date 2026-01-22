@@ -1,8 +1,9 @@
 // app/products/[id]/page.tsx
 import { allProducts } from "@/utils/products";
 import ProductInfo from "../ProductInfo";
-import ProductReviews from "../ProductReviews";
-import RecommendedProducts from "../RecommendedProducts";
+import RecommendedProducts from "@/components/Product/RecommendedProduct";
+// import ProductReviews from "../ProductReviews";
+// import RecommendedProducts from "../RecommendedProducts";
 
 // ----------------------
 // Type Definitions
@@ -69,8 +70,13 @@ export default async function ProductDetail({ params }: ProductParamsPromise) {
   return (
     <div className="min-h-screen  pt-32">
       <ProductInfo product={product} />
-      <ProductReviews productId={productId} />
-      <RecommendedProducts currentId={productId} category={product.category} />
+      {/* <ProductReviews productId={productId} />
+      <RecommendedProducts currentId={productId} category={product.category} /> */}
+
+      <div className=" py-12">
+        <hr />
+      </div>
+      <RecommendedProducts />
     </div>
   );
 }

@@ -2,7 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { allProducts } from "@/utils/products";
-import { Product } from "@/utils/products"; // Import from correct location
+import { Product } from "@/utils/products";
+import { useState, useEffect } from "react";
 
 interface RecommendedProductsProps {
   currentId: number;
@@ -13,12 +14,46 @@ export default function RecommendedProducts({
   currentId,
   category,
 }: RecommendedProductsProps) {
+  const [activeTab, setActiveTab] = useState<"related" | "recent">("related");
+  const [startIndex, setStartIndex] = useState(0);
+  const ITEMS_PER_PAGE = 4;
+
+  // Get recently viewed products from localStorage
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("recentlyViewed");
+    if (stored) {
+      try {
+        const viewedIds = JSON.parse(stored);
+        const viewedProducts = allProducts
+          .filter((p) => viewedIds.includes(p.id) && p.id !== currentId)
+          .slice(0, 8);
+        setRecentlyViewed(viewedProducts);
+      } catch (error) {
+        console.error("Error parsing recently viewed:", error);
+      }
+    }
+  }, [currentId]);
+
   // Filter related products by category and exclude current product
   const related = allProducts
     .filter((p) => p.category === category && p.id !== currentId)
-    .slice(0, 5);
+    .slice(0, 8);
 
-  if (related.length === 0) return null;
+  // Get current products based on active tab
+  const getCurrentProducts = () => {
+    const products = activeTab === "related" ? related : recentlyViewed;
+    return products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  };
+
+  const currentProducts = getCurrentProducts();
+  const totalProducts =
+    activeTab === "related" ? related.length : recentlyViewed.length;
+  const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+  const currentPage = Math.floor(startIndex / ITEMS_PER_PAGE) + 1;
+
+  if (currentProducts.length === 0) return null;
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }).map((_, index) => (
@@ -33,20 +68,11 @@ export default function RecommendedProducts({
     ));
   };
 
-  // Check if product has specific features
-  const hasFeature = (product: Product, feature: string): boolean => {
-    return product.features.some((f: string) =>
-      f.toLowerCase().includes(feature.toLowerCase())
-    );
-  };
-
-  // Get warranty info from features
-  const getWarranty = (product: Product): string => {
-    const warrantyFeature = product.features.find(
-      (f: string) =>
-        f.toLowerCase().includes("warranty") || f.toLowerCase().includes("year")
-    );
-    return warrantyFeature || "Warranty Included";
+  // Get stock status
+  const getStockStatus = (product: Product): string => {
+    if (product.stockQuantity > 10) return "In Stock";
+    if (product.stockQuantity > 0) return `Only ${product.stockQuantity} left`;
+    return "Out of Stock";
   };
 
   // Calculate discount percentage
@@ -55,49 +81,24 @@ export default function RecommendedProducts({
     return Math.round((1 - product.price / product.originalPrice) * 100);
   };
 
-  // Get stock status text and color
-  const getStockStatus = (
-    product: Product
-  ): { text: string; color: string; barColor: string } => {
-    if (product.stockQuantity > 10) {
-      return {
-        text: "Plenty Available",
-        color: "text-green-600",
-        barColor: "bg-green-500",
-      };
-    } else if (product.stockQuantity > 0) {
-      return {
-        text: `Only ${product.stockQuantity} left`,
-        color: "text-amber-600",
-        barColor: "bg-amber-500",
-      };
-    } else {
-      return {
-        text: "Out of Stock",
-        color: "text-red-600",
-        barColor: "bg-red-500",
-      };
-    }
-  };
-
   // Get first material
   const getFirstMaterial = (product: Product): string => {
     return product.material.split(",")[0].trim();
   };
 
-  // Get first dimension
-  const getFirstDimension = (product: Product): string => {
-    return product.dimensions.split(" ")[0];
+  const handlePrev = () => {
+    setStartIndex((prev) => Math.max(0, prev - ITEMS_PER_PAGE));
   };
 
-  // Calculate stock percentage for progress bar
-  const getStockPercentage = (product: Product): number => {
-    return Math.min((product.stockQuantity / 20) * 100, 100);
+  const handleNext = () => {
+    setStartIndex((prev) =>
+      Math.min(totalProducts - ITEMS_PER_PAGE, prev + ITEMS_PER_PAGE),
+    );
   };
 
   return (
     <section
-      className="py-8 sm:py-10 md:py-12 px-3 sm:px-6 md:px-10 "
+      className="py-8 sm:py-10 md:py-12 px-3 sm:px-6 md:px-10"
       style={{
         fontFamily: "system-ui, sans-serif",
         letterSpacing: "0.08em",
@@ -106,191 +107,159 @@ export default function RecommendedProducts({
       }}
     >
       <div className="max-w-full mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">
-            Recommended <span className="text-pink-500">Products</span>
+        {/* Section Header with Tabs */}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            You Might Also Like
           </h2>
-          <p className="text-gray-500 text-sm md:text-base">
-            Handpicked items you might love 💖
-          </p>
+
+          {/* Tabs */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex rounded-lg border border-gray-200 p-1">
+              <button
+                onClick={() => {
+                  setActiveTab("related");
+                  setStartIndex(0);
+                }}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                  activeTab === "related"
+                    ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Related Products ({related.length})
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("recent");
+                  setStartIndex(0);
+                }}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                  activeTab === "recent"
+                    ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Recently Viewed ({recentlyViewed.length})
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* ✅ Responsive Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
-          {related.map((product) => {
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {currentProducts.map((product) => {
             const discountPercentage = getDiscountPercentage(product);
             const stockStatus = getStockStatus(product);
-            const stockPercentage = getStockPercentage(product);
             const firstMaterial = getFirstMaterial(product);
-            const firstDimension = getFirstDimension(product);
 
             return (
               <div
                 key={product.id}
-                className="group  rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-pink-100 relative"
+                className="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white relative"
               >
                 <Link href={`/products/${product.id}`}>
                   {/* Product Image */}
-                  <div className="relative w-full h-44 md:h-56 overflow-hidden">
+                  <div className="relative w-full h-48 md:h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                     <Image
                       src={product.image}
                       alt={product.name}
                       width={400}
                       height={400}
-                      className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300 border-b border-gray-200"
+                      className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500"
                     />
 
-                    {/* Top Badges */}
-                    <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
-                      <div className="flex flex-col gap-1">
-                        {product.isNew && (
-                          <span className="bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
-                            NEW
-                          </span>
-                        )}
-                        {product.isBestSeller && (
-                          <span className="bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
-                            BEST SELLER
-                          </span>
-                        )}
+                    {/* Discount Badge */}
+                    {discountPercentage > 0 && (
+                      <div className="absolute top-3 right-3">
+                        <span className="bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                          -{discountPercentage}% OFF
+                        </span>
                       </div>
+                    )}
 
-                      {/* Discount Badge */}
-                      {discountPercentage > 0 && (
-                        <div className="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
-                          -{discountPercentage}%
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Bottom Features Badges */}
-                    <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
-                      {hasFeature(product, "free") && (
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-sm">
-                          🚚 Free
-                        </span>
-                      )}
-                      {hasFeature(product, "authentic") && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full shadow-sm">
-                          ✓ Authentic
-                        </span>
-                      )}
-                      {hasFeature(product, "premium") && (
-                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full shadow-sm">
-                          ✨ Premium
-                        </span>
-                      )}
+                    {/* Quick View Overlay */}
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-white text-gray-900 font-semibold px-4 py-2 rounded-full text-sm shadow-lg">
+                        Quick View
+                      </span>
                     </div>
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-4 flex flex-col items-start">
-                    {/* Brand/Category */}
-                    <p className="text-xs text-blue-600 font-semibold mb-1 capitalize">
+                  <div className="p-4">
+                    {/* Category */}
+                    <p className="text-xs text-purple-600 font-semibold mb-1 uppercase tracking-wider">
                       {product.category}
                     </p>
 
                     {/* Product Name */}
-                    <p className="font-semibold text-gray-800 text-sm md:text-base mb-1 group-hover:text-pink-600 transition-colors line-clamp-2">
+                    <h3 className="font-bold text-gray-900 text-base mb-2 group-hover:text-purple-600 transition-colors line-clamp-1">
                       {product.name}
-                    </p>
-
-                    {/* Features as Tags */}
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      {product.features.slice(0, 2).map((feature, index) => (
-                        <span
-                          key={index}
-                          className="bg-pink-100 text-pink-700 text-xs px-2 py-1 rounded-full"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                      {product.features.length > 2 && (
-                        <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
-                          +{product.features.length - 2}
-                        </span>
-                      )}
-                    </div>
+                    </h3>
 
                     {/* Rating */}
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <div className="flex items-center gap-1">
                         {renderStars(product.rating)}
                       </div>
                       <span className="text-xs text-gray-600">
-                        {product.rating}/5
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        ({product.reviews})
+                        ({product.reviews} reviews)
                       </span>
                     </div>
 
                     {/* Price */}
-                    <div className="flex items-center justify-between w-full">
-                      <div className="space-y-1">
-                        <p className="font-bold text-gray-800 text-lg">
-                          ${product.price}
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <p className="font-bold text-gray-900 text-lg">
+                          ${product.price.toFixed(2)}
                         </p>
                         {product.originalPrice && (
                           <p className="text-xs text-gray-500 line-through">
-                            ${product.originalPrice}
+                            ${product.originalPrice.toFixed(2)}
                           </p>
                         )}
                       </div>
-
-                      {/* Quick Features */}
-                      <div className="flex flex-col items-end space-y-1">
-                        <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-                          {getWarranty(product)}
-                        </span>
-                        {product.inStock ? (
-                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                            In Stock
-                          </span>
-                        ) : (
-                          <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                            Out of Stock
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Material & Dimensions */}
-                    <div className="flex flex-col gap-1 mt-2 w-full">
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>Material:</span>
-                        <span className="text-gray-700 font-medium">
-                          {firstMaterial}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>Dimensions:</span>
-                        <span className="text-gray-700 font-medium text-right">
-                          {firstDimension}
+                      <div className="text-right">
+                        <span
+                          className={`text-xs font-semibold ${
+                            product.stockQuantity > 10
+                              ? "text-green-600"
+                              : product.stockQuantity > 0
+                                ? "text-amber-600"
+                                : "text-red-600"
+                          }`}
+                        >
+                          {stockStatus}
                         </span>
                       </div>
                     </div>
 
-                    {/* Stock Status */}
-                    <div className="w-full mt-2">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500">Stock:</span>
-                        <span className={`font-semibold ${stockStatus.color}`}>
-                          {stockStatus.text}
+                    {/* Material & Quick Info */}
+                    <div className="border-t border-gray-100 pt-3">
+                      <div className="flex items-center justify-between text-xs text-gray-600">
+                        <span className="font-medium">Material:</span>
+                        <span className="text-gray-900">{firstMaterial}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-gray-600 mt-1">
+                        <span className="font-medium">Style:</span>
+                        <span className="text-gray-900 capitalize">
+                          {product.category}
                         </span>
                       </div>
-                      {product.stockQuantity > 0 && (
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                          <div
-                            className={`h-1.5 rounded-full ${stockStatus.barColor}`}
-                            style={{
-                              width: `${stockPercentage}%`,
-                            }}
-                          ></div>
-                        </div>
-                      )}
                     </div>
+
+                    {/* Add to Cart Button */}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Add to cart logic here
+                      }}
+                      className="w-full mt-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2.5 rounded-lg font-semibold text-sm hover:from-gray-800 hover:to-gray-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg"
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </Link>
               </div>
@@ -298,18 +267,67 @@ export default function RecommendedProducts({
           })}
         </div>
 
-        {/* View More Button */}
-        {related.length >= 4 && (
-          <div className="text-center mt-8">
-            <Link
-              href={`/products?category=${category}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:shadow-lg transition-all duration-300 hover:scale-105"
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <button
+              onClick={handlePrev}
+              disabled={startIndex === 0}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                startIndex === 0
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              }`}
             >
-              View All {category} Products
-              <span className="text-lg">→</span>
-            </Link>
+              ← Previous
+            </button>
+
+            <div className="flex items-center gap-2">
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const page = index + 1;
+                const isActive = currentPage === page;
+                const pageStartIndex = (page - 1) * ITEMS_PER_PAGE;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setStartIndex(pageStartIndex)}
+                    className={`w-8 h-8 rounded-full font-medium text-sm transition-all ${
+                      isActive
+                        ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={handleNext}
+              disabled={startIndex + ITEMS_PER_PAGE >= totalProducts}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                startIndex + ITEMS_PER_PAGE >= totalProducts
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+              }`}
+            >
+              Next →
+            </button>
           </div>
         )}
+
+        {/* View All Button */}
+        <div className="text-center mt-8">
+          <Link
+            href={`/products?category=${category}`}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white px-8 py-3 rounded-full font-semibold text-sm hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            View All Products
+            <span className="text-lg">→</span>
+          </Link>
+        </div>
       </div>
     </section>
   );
