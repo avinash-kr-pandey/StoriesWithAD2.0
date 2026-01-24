@@ -97,6 +97,7 @@ const ShopHeader = () => {
             />
           </button>
 
+
           {/* SORT DROPDOWN */}
           <AnimatePresence>
             {isSortOpen && (
@@ -225,9 +226,9 @@ const ShopHeader = () => {
                   <p className="text-sm uppercase tracking-wide text-center min-h-[48px] flex items-center justify-center">
                     {product.name}
                   </p>
-                  {/* <p className="text-md text-center min-h-[48px] flex items-center justify-center">
-                    ${product.price}
-                  </p> */}
+                  <p className="text-md text-center flex items-center justify-center">
+                    ₹{product.price}
+                  </p>
                 </div>
               </Link>
             ))}

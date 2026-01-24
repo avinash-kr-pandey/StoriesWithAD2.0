@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 // import { projects } from "@/utils/projectsData";
-import { Product, products } from "@/utils/products";
+import { Product, products } from "@/utils/PORTFOLIO";
 
 import Link from "next/link";
 import Image from "next/image";
