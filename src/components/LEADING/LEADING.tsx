@@ -6,7 +6,6 @@ const LEADING = () => {
   return (
     <div className="py-12 min-h-[90vh] flex justify-center px-4 md:px-8">
       <div className="max-w-[1400px] w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
-
         {/* Left Side (Image) */}
         <motion.div
           className="w-full h-[500px] md:h-[600px] flex items-center justify-center"
@@ -16,7 +15,7 @@ const LEADING = () => {
           transition={{ duration: 1 }}
         >
           <Image
-            src="/PICTURES/shop/ABOUT.jpg"
+            src="/adimages/AdImage3.jpg"
             alt="AD - Interior Stylist"
             width={800}
             height={600}
@@ -34,7 +33,8 @@ const LEADING = () => {
         >
           {/* Title with font-light */}
           <h2 className="text-2xl md:text-2xl !font-light tracking-wide mb-4 text-gray-800 font-modern">
-            IT’S ALL ABOUT PASSION, GRIT &{" "} <br /> THE GIRL WHO NEVER GAVE UP <br /> THE LADY BOSS
+            IT’S ALL ABOUT PASSION, GRIT & <br /> THE GIRL WHO NEVER GAVE UP{" "}
+            <br /> THE LADY BOSS
             {/* <h2 className="text-2xl md:text-2xl"></h2>
             <h2 className="text-2xl md:text-2xl "></h2> */}
           </h2>
@@ -47,20 +47,20 @@ const LEADING = () => {
             </p>
 
             <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-2 system-ui">
-              After 13 years of designing in India, 2 years of rebuilding life in
-              Singapore, and now preparing for another big move — this time to the
-              United States — AD stands exactly where she always hoped to be: at
-              the edge of something bigger, carrying a little fear but a lot more
-              fire.
+              After 13 years of designing in India, 2 years of rebuilding life
+              in Singapore, and now preparing for another big move — this time
+              to the United States — AD stands exactly where she always hoped to
+              be: at the edge of something bigger, carrying a little fear but a
+              lot more fire.
             </p>
 
             <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-0 system-ui">
-              Stories with AD is the result of that fire — an obsession with good
-              work, an eye for beauty, a love for craft, and a belief that design
-              can hold meaning far beyond spaces. It is a brand built on
+              Stories with AD is the result of that fire — an obsession with
+              good work, an eye for beauty, a love for craft, and a belief that
+              design can hold meaning far beyond spaces. It is a brand built on
               resilience. On courage. On the quiet determination of a woman who
-              refused to let life write her story for her — and chose to write it
-              herself.
+              refused to let life write her story for her — and chose to write
+              it herself.
             </p>
 
             <p className="text-gray-800 text-md md:text-sm leading-relaxed system-ui">

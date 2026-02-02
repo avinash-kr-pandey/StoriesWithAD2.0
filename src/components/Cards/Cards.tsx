@@ -78,12 +78,12 @@ const Cards = () => {
             className="flex flex-col"
           >
             {/* Image */}
-            <div className="w-full h-[500px] relative overflow-hidden">
+            <div className="w-full aspect-[3/5] relative ">
               <Image
                 src={card.img}
                 alt={card.title}
                 fill
-                className="object-full transition-transform duration-300 hover:scale-105 "
+                className="object-contain"
               />
             </div>
 
