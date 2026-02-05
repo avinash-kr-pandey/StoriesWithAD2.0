@@ -57,7 +57,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className=" text-[#2f2f2f] border-t border-gray-600">
+    <footer className=" text-[#2f2f2f] ">
       <div className="px-4 md:px-8 lg:px-16 py-16">
         <div className="max-w-screen-2xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
