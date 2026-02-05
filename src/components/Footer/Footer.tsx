@@ -15,13 +15,13 @@ const Footer = () => {
   };
 
   useEffect(() => {
-  const handleScroll = () => {
-    setShowScrollTop(window.scrollY > 300); // 300px ke baad show
-  };
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const footerGroups = [
     {
@@ -57,7 +57,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#e2d8c6] text-[#2f2f2f]">
+    <footer className=" text-[#2f2f2f] border-t border-gray-600">
       <div className="px-4 md:px-8 lg:px-16 py-16">
         <div className="max-w-screen-2xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
@@ -73,8 +73,14 @@ const Footer = () => {
               </Link>
 
               <p
-                className="font-system text-gray-700 text-base max-w-md tracking-wide 
-                "
+                className="relative font-system inline-block tracking-wider text-justify pr-12
+   
+    text-gray-800 transition-colors duration-300
+    after:absolute after:left-0 after:-bottom-1
+    after:h-[1px] after:w-full after:bg-gray-800
+    after:scale-x-0 after:origin-left
+    after:transition-transform after:duration-300
+    hover:after:scale-x-100"
               >
                 Curating timeless interiors and bespoke furnishings that tell
                 unique stories. Elevating spaces through thoughtful design,
@@ -83,10 +89,10 @@ const Footer = () => {
             </div>
 
             {/* Groups */}
-            {footerGroups.map((group) => (
+            {footerGroups?.map((group) => (
               <div key={group.title}>
                 <h3
-                  className="text-sm uppercase tracking-wider mb-6 text-gray-600 
+                  className="text-md md:text-xl uppercase tracking-widest
                   "
                 >
                   {group.title}
@@ -118,7 +124,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-gray-300 px-4 md:px-8 lg:px-16 py-8 bg-[#e2d8c6]">
+      {/* <div className="border-t border-gray-300 px-4 md:px-8 lg:px-16 py-8 bg-[#e2d8c6]"> */}
+      <div className="border-t border-gray-300 px-4 md:px-8 lg:px-16 py-8">
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <p
@@ -159,17 +166,17 @@ const Footer = () => {
 
       {/* Scroll Top */}
       {showScrollTop && (
-  <motion.div
-    className="fixed bottom-8 right-8 z-50"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: 20 }}
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <button
-      onClick={scrollToTop}
-      className="
+        <motion.div
+          className="fixed bottom-8 right-8 z-50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <button
+            onClick={scrollToTop}
+            className="
         px-2 py-2
         bg-black text-white
         uppercase tracking-widest text-xs
@@ -178,12 +185,11 @@ const Footer = () => {
         transition-all duration-300
         font-system
       "
-    >
-      <FaArrowUp />
-    </button>
-  </motion.div>
-)}
-
+          >
+            <FaArrowUp />
+          </button>
+        </motion.div>
+      )}
     </footer>
   );
 };

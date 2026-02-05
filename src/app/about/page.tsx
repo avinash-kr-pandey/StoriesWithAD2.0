@@ -9,6 +9,7 @@ const About = () => {
     images.gallery.art[2],
     images.featured.curated,
   ];
+  
 
   return (
     <div className="min-h-screen pt-32 w-full">
@@ -62,7 +63,8 @@ const About = () => {
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden">
               <Image
-                src={aboutImages[1]}
+                // src={aboutImages[1]}
+                src="/adimages/AdImage2.jpg"
                 alt="Studio Space"
                 fill
                 className="object-cover hover:scale-102 transition-transform duration-700"
