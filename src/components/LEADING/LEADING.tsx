@@ -39,14 +39,14 @@ const LEADING = () => {
             <h2 className="text-2xl md:text-2xl "></h2> */}
           </h2>
 
-          <div className="md:pr-12 text-justify">
+          <div className="md:pr-12 text-justify pt-5">
             {/* Paragraphs with font-thin */}
-            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-2 system-ui">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-3 system-ui">
               “No one said it would be easy. But I promised myself I would work
               hard — so hard that failure simply wouldn’t be an option.”
             </p>
 
-            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-2 system-ui">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-3 system-ui">
               After 13 years of designing in India, 2 years of rebuilding life
               in Singapore, and now preparing for another big move — this time
               to the United States — AD stands exactly where she always hoped to
@@ -54,7 +54,7 @@ const LEADING = () => {
               lot more fire.
             </p>
 
-            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-0 system-ui">
+            <p className="text-gray-800 text-md md:text-sm leading-relaxed mb-3 system-ui">
               Stories with AD is the result of that fire — an obsession with
               good work, an eye for beauty, a love for craft, and a belief that
               design can hold meaning far beyond spaces. It is a brand built on
