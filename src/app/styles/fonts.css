@@ -1,0 +1,94 @@
+@font-face {
+  font-family: 'Sprat-Variable';
+  src: url('/fonts/Sprat_Variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedBlack';
+  src: url('/fonts/Sprat-CondensedBlack.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedBold';
+  src: url('/fonts/Sprat-CondensedBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedLight';
+  src: url('/fonts/Sprat-CondensedLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedMedium';
+  src: url('/fonts/Sprat-CondensedMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedThin';
+  src: url('/fonts/Sprat-CondensedThin.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-CondensedRegular';
+  src: url('/fonts/Sprat-CondensedRegular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedBlack';
+  src: url('/fonts/Sprat-ExtendedBlack.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedBold';
+  src: url('/fonts/Sprat-ExtendedBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedLight';
+  src: url('/fonts/Sprat-ExtendedLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedMedium';
+  src: url('/fonts/Sprat-ExtendedMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedRegular';
+  src: url('/fonts/Sprat-Extendedregular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-ExtendedThin';
+  src: url('/fonts/Sprat-ExtendedThin.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-Regular';
+  src: url('/fonts/Sprat-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-RegularBlack';
+  src: url('/fonts/Sprat-RegularBlack.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-RegularBold';
+  src: url('/fonts/Sprat-RegularBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-RegularLight';
+  src: url('/fonts/Sprat-RegularLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-RegularMedium';
+  src: url('/fonts/Sprat-RegularMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sprat-RegularThin';
+  src: url('/fonts/Sprat-RegularThin.otf') format('opentype');
+}

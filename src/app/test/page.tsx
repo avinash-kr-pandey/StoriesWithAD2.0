@@ -1,34 +1,49 @@
+import "../../app/styles/fonts.css";
 
-const TestFont = () => {
+const fonts = [
+  "Sprat-Variable",
+  "Sprat-CondensedBlack",
+  "Sprat-CondensedBold",
+  "Sprat-CondensedLight",
+  "Sprat-CondensedMedium",
+  "Sprat-CondensedThin",
+  "Sprat-CondensedRegular",
+  "Sprat-ExtendedBlack",
+  "Sprat-ExtendedBold",
+  "Sprat-ExtendedLight",
+  "Sprat-ExtendedMedium",
+  "Sprat-ExtendedRegular",
+  "Sprat-ExtendedThin",
+  "Sprat-Regular",
+  "Sprat-RegularBlack",
+  "Sprat-RegularBold",
+  "Sprat-RegularLight",
+  "Sprat-RegularMedium",
+  "Sprat-RegularThin",
+];
+
+export default function FontPage() {
   return (
-    <div className="p-8 space-y-6 mt-80">
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-thin">Sprat Heading Thin</h1>
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-light">Sprat Heading Light</h1>
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-normal">Sprat Heading Regular</h1>
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-medium">Sprat Heading Medium</h1>
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-bold">Sprat Heading Bold</h1>
-      <h1 className="font-[var(--FONT-STACK-HEADING)] font-black">Sprat Heading Black</h1>
+    <div style={{ padding: 40 }} className="my-30">
+      <h1 style={{ marginBottom: 30 }}>Font Preview Page</h1>
 
-      {/* Accent font example */}
-      <h2 className="font-[var(--FONT-STACK-ACCENT)] text-xl">Sprat Extended Accent Text</h2>
-      <p className="font-[var(--FONT-STACK-ACCENT)]">This is accent text example</p>
+      {fonts.map((fontName) => (
+        <div key={fontName} style={{ marginBottom: 10 }}>
+          <h2>{fontName}</h2>
+          <p
+            style={{
+              fontFamily: fontName,
+              fontSize: 28,
+              border: "1px solid #ddd",
+              padding: 12,
+              borderRadius: 6,
+              // maxWidth: 600,
+            }}
+          >
+            The quick brown 
+          </p>
+        </div>
+      ))}
     </div>
   );
-};
-
-
-export default TestFont;
-
-
-
-
-// 1. STORIES WITH AD 
-// 2. is a 3.
-//  creative interior design studio led by its 
-//  4. FOUNDER AND CREATIVE DIRECTOR, AD. 
-//  5. the studio&lsquo;s 
-//  6. SIGNATURE AESTHETIC 
-//  7. is defined by 
-//  8. SOULFUL SPACES 
-//  9. shaped by 
-//  10. STORY, CRAFT, AND INTENTION.
+}
