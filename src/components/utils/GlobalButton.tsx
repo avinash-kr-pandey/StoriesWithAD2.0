@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { MdOutlineArrowForward } from "react-icons/md";
 
 interface GlobalButtonProps {
   text: string;
@@ -17,8 +18,8 @@ const GlobalButton: React.FC<GlobalButtonProps> = ({ text, className }) => {
       `}
       style={{
         fontFamily: "system-ui, sans-serif",
-        letterSpacing: "0.08em",
-        fontWeight: 500,
+        letterSpacing: "0.01em",
+        fontWeight: 300,
       }}
     >
       {/* Hover overlay */}
@@ -33,9 +34,18 @@ const GlobalButton: React.FC<GlobalButtonProps> = ({ text, className }) => {
         "
       />
 
-      <h2 className="relative z-10 uppercase text-sm">
+      <span className="relative z-10 uppercase text-sm flex items-center gap-2">
         {text}
-      </h2>
+
+        {/* React Icon Arrow */}
+        <MdOutlineArrowForward
+          className="
+            transition-transform duration-300 ease-out
+            group-hover:translate-x-2
+          "
+          size={16}
+        />
+      </span>
     </button>
   );
 };

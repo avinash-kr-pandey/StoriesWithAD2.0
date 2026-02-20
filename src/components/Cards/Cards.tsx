@@ -96,7 +96,7 @@ const Cards = () => {
                 className="mt-2 text-md text-gray-900 leading-relaxed font-thin "
                 style={{
                   letterSpacing: "0.04em",
-                  lineHeight: "1.6",
+                  lineHeight: "1.4",
                   fontFamily: "system-ui, sans-serif",
                   fontWeight: 400,
                 }}
@@ -105,8 +105,8 @@ const Cards = () => {
               </p>
 
               <GlobalButton
-                text={`${card.btnText} →`}
-                className="mt-4 px-6 py-1 border border-black text-black h-[48px]"
+                text={`${card.btnText}`}
+                className="mt-4 px-4 py-1 border border-black  h-[48px] !font-light"
               />
             </div>
           </motion.div>

@@ -35,8 +35,7 @@ export default function Header() {
   const router = useRouter();
   const [shouldShowBg, setShouldShowBg] = useState(false);
   const pathname = usePathname();
-const isHomePage = pathname === "/";
-
+  const isHomePage = pathname === "/";
 
   const menuItems = [
     {
@@ -196,7 +195,7 @@ const isHomePage = pathname === "/";
     if (!isMovingToNav) {
       setTimeout(() => {
         setHovered(null);
-        setShouldShowBg(false); // Explicitly reset background
+        setShouldShowBg(false);
       }, 150);
     }
   };
@@ -354,7 +353,7 @@ const isHomePage = pathname === "/";
             fontFamily: "system-ui, sans-serif",
             letterSpacing: "0.08em",
             lineHeight: "1.6",
-            fontWeight: 500,
+            fontWeight: 350,
           }}
         >
           Sign up to my monthly trade newsletter for{" "}
@@ -395,7 +394,8 @@ const isHomePage = pathname === "/";
               className="font-[var(--FONT-STACK-ACCENT)] text-xl flex-grow text-center
                md:text-4xl text-2xl uppercase tracking-widest"
               style={{
-                color: isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
+                color:
+                  isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
               }}
             >
               Stories With AD
@@ -483,16 +483,18 @@ const isHomePage = pathname === "/";
                 {item.path ? (
                   <Link href={item.path}>
                     <h1
-  className="block py-2 cursor-pointer transition-all duration-300"
-  style={{
-    color: isHomePage && !isFixed && !shouldShowBg ? "white" : "#1f2937",
-    letterSpacing: "0.08em",
-    fontFamily: "system-ui, sans-serif",
-  }}
->
-  {item.name}
-</h1>
-
+                      className="block py-2 cursor-pointer transition-all duration-300"
+                      style={{
+                        color:
+                          isHomePage && !isFixed && !shouldShowBg
+                            ? "white"
+                            : "#1f2937",
+                        letterSpacing: "0.08em",
+                        fontFamily: "system-ui, sans-serif",
+                      }}
+                    >
+                      {item.name}
+                    </h1>
                   </Link>
                 ) : (
                   <h1
@@ -743,8 +745,8 @@ const isHomePage = pathname === "/";
       </div>
       {/* HR Line under navigation */}
       <div
-        className={`w-full h-px mt-0 hidden md:block ${
-          shouldShowBg || isFixed ? "bg-black" : "bg-white"
+        className={`w-full h-[0.5px] mt-2 hidden md:block ${
+          shouldShowBg || isFixed ? "bg-black" : "bg-gray-400"
         }`}
       ></div>
     </header>
